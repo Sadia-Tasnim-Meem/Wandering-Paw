@@ -1,8 +1,8 @@
-package com.mygdx.wandaringpaw.state;
+package com.mygdx.wanderingpaw.state;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.wandaringpaw.main.Game;
+import com.mygdx.wanderingpaw.main.Game;
 
 public class GameState {
 

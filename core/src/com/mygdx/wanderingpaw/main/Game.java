@@ -1,4 +1,4 @@
-package com.mygdx.wandaringpaw.main;
+package com.mygdx.wanderingpaw.main;
 
 
 import com.badlogic.gdx.ApplicationListener;
