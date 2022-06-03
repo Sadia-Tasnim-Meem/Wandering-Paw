@@ -2,16 +2,11 @@ package com.mygdx.wanderingpaw.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.wanderingpaw.handlers.B2DVars;
-import com.mygdx.wanderingpaw.handlers.BoundedCamera;
-import com.mygdx.wanderingpaw.handlers.GameStateManager;
+import com.mygdx.wanderingpaw.handlers.*;
 import com.mygdx.wanderingpaw.main.Game;
-
-import java.util.Vector;
 
 import static com.mygdx.wanderingpaw.handlers.B2DVars.PPM;
 
@@ -19,13 +14,23 @@ public class Play extends GameState {
     private World world;
     private Box2DDebugRenderer b2dr;
     private OrthographicCamera b2dCam;
+
+    private Body playerBody;
+    private CustomizedContactListener contactListener;
+
+
+
     public Play(GameStateManager gsm) {
 
         super(gsm);
         world = new World(new Vector2(0, -9.81f), true);
+
+        contactListener = new CustomizedContactListener();
+        world.setContactListener(contactListener);
+
         b2dr = new Box2DDebugRenderer();
 
-        //ground box
+        //PLATFORM
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(160 / PPM, 120 / PPM);
@@ -37,22 +42,29 @@ public class Play extends GameState {
         FixtureDef fdef = new FixtureDef();
         fdef.shape = shape;
         fdef.filter.categoryBits = B2DVars.BIT_GROUND;
-        fdef.filter.maskBits = B2DVars.BIT_BOX;
-        body.createFixture(fdef);
+        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
+        body.createFixture(fdef).setUserData("ground");
 
-        // falling box
+        // PLAYER
 
-        bdef.position.set(160 / PPM, 200/PPM);
+        bdef.position.set(160 / PPM, 200 / PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
-        body = world.createBody(bdef);
+        playerBody = world.createBody(bdef);
 
         shape.setAsBox(5 / PPM, 5 / PPM);
         fdef.shape = shape;
-        body.createFixture(fdef);
-        fdef.filter.categoryBits = B2DVars.BIT_BOX;
+        fdef.restitution = 0.2f;
+        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
         fdef.filter.maskBits = B2DVars.BIT_GROUND;
-        body.createFixture(fdef);
+        playerBody.createFixture(fdef).setUserData("player");
 
+        //create foot sensor
+        shape.setAsBox(2/ PPM, 2 / PPM, new Vector2(0, -5 /PPM), 0);
+        fdef.shape = shape;
+        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
+        fdef.filter.maskBits = B2DVars.BIT_GROUND;
+        fdef.isSensor = true;
+        playerBody.createFixture(fdef).setUserData("foot");
 
 
 
@@ -63,11 +75,21 @@ public class Play extends GameState {
     }
 
     public void handleInput() {
+        // player jump
+
+        if(CustomizedInput.isPressed(CustomizedInput.BUTTON1)){
+            if(contactListener.isPlayerOnGround()){
+                playerBody.applyForceToCenter(0, 160, true );
+            }
+
+        }
 
     }
 
     public void update(float dt) {
-        world.step(dt, 6,2);
+
+        handleInput();
+        world.step(dt, 6, 2);
 
     }
 
