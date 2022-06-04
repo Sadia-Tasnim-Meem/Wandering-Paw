@@ -23,12 +23,15 @@ public class Play extends GameState {
     public Play(GameStateManager gsm) {
 
         super(gsm);
-        world = new World(new Vector2(0, -9.81f), true);
 
+        //set up box2d world and contact listener
+        world = new World(new Vector2(0, -9.81f), true);
         contactListener = new CustomizedContactListener();
         world.setContactListener(contactListener);
-
         b2dr = new Box2DDebugRenderer();
+
+        //create player
+        createPlayer();
 
         //PLATFORM
 
@@ -47,24 +50,15 @@ public class Play extends GameState {
 
         // PLAYER
 
-        bdef.position.set(160 / PPM, 200 / PPM);
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        playerBody = world.createBody(bdef);
 
-        shape.setAsBox(5 / PPM, 5 / PPM);
-        fdef.shape = shape;
-        fdef.restitution = 0.2f;
-        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_GROUND;
-        playerBody.createFixture(fdef).setUserData("player");
 
         //create foot sensor
-        shape.setAsBox(2/ PPM, 2 / PPM, new Vector2(0, -5 /PPM), 0);
+/*        shape.setAsBox(2/ PPM, 2 / PPM, new Vector2(0, -5 /PPM), 0);
         fdef.shape = shape;
         fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
         fdef.filter.maskBits = B2DVars.BIT_GROUND;
         fdef.isSensor = true;
-        playerBody.createFixture(fdef).setUserData("foot");
+        playerBody.createFixture(fdef).setUserData("foot");*/
 
 
 
@@ -72,6 +66,54 @@ public class Play extends GameState {
         b2dCam = new OrthographicCamera();
         b2dCam.setToOrtho(false, Game.V_WIDTH / PPM, Game.V_HEIGHT / PPM);
 
+    }
+
+    public void createPlayer(){
+        // create bodydef
+        BodyDef bdef = new BodyDef();
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        bdef.position.set(160 / PPM, 200 / PPM);
+        bdef.fixedRotation = true;
+
+
+        // create body from bodydef
+        Body playerbody = world.createBody(bdef);
+
+        // create box shape for player collision box
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(5 / PPM, 5 / PPM);
+
+        // create fixturedef for player collision box
+        FixtureDef fdef = new FixtureDef();
+        fdef.shape = shape;
+        fdef.density = 1;
+        fdef.friction = 0;
+        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
+        //fdef.filter.maskBits = B2DVars.BIT_RED_BLOCK | B2DVars.BIT_CRYSTAL | B2DVars.BIT_SPIKE;
+
+        // create player collision box fixture
+        playerbody.createFixture(fdef);
+        shape.dispose();
+
+        // create box shape for player foot
+        shape = new PolygonShape();
+        shape.setAsBox(5 / PPM, 5 / PPM, new Vector2(0, -5 / PPM), 0);
+
+
+        // create fixturedef for player foot
+        fdef.shape = shape;
+        fdef.isSensor = true;
+        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
+        //fdef.filter.maskBits = B2DVars.BIT_RED_BLOCK;
+
+        // create player foot fixture
+        playerbody.createFixture(fdef).setUserData("foot");
+        shape.dispose();
+
+        // manually set the player body mass to 1 kg
+        MassData md = playerbody.getMassData();
+        md.mass = 1;
+        playerbody.setMassData(md);
     }
 
     public void handleInput() {
