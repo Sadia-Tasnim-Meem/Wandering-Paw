@@ -3,8 +3,10 @@ package com.mygdx.wanderingpaw.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.wanderingpaw.entities.Player;
 import com.mygdx.wanderingpaw.handlers.*;
 import com.mygdx.wanderingpaw.main.Game;
 
@@ -17,6 +19,9 @@ public class Play extends GameState {
 
     private Body playerBody;
     private CustomizedContactListener contactListener;
+
+    private Player player;
+
 
 
 
@@ -33,15 +38,18 @@ public class Play extends GameState {
         //create player
         createPlayer();
 
+        //create backgrounds
+        Texture bgs = Game.res.getTexture("background-image.png");
+
         //PLATFORM
 
         BodyDef bdef = new BodyDef();
-        bdef.position.set(160 / PPM, 120 / PPM);
+        bdef.position.set(0 / PPM, 0 / PPM);
         bdef.type = BodyDef.BodyType.StaticBody;
         Body body = world.createBody(bdef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(50 / PPM, 5 / PPM);
+        shape.setAsBox(300 / PPM, 5 / PPM);
         FixtureDef fdef = new FixtureDef();
         fdef.shape = shape;
         fdef.filter.categoryBits = B2DVars.BIT_GROUND;
@@ -72,16 +80,16 @@ public class Play extends GameState {
         // create bodydef
         BodyDef bdef = new BodyDef();
         bdef.type = BodyDef.BodyType.DynamicBody;
-        bdef.position.set(160 / PPM, 200 / PPM);
+        bdef.position.set(60 / PPM, 120 / PPM);
         bdef.fixedRotation = true;
 
 
         // create body from bodydef
-        Body playerbody = world.createBody(bdef);
+        Body body = world.createBody(bdef);
 
         // create box shape for player collision box
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(5 / PPM, 5 / PPM);
+        shape.setAsBox(13 / PPM, 13 / PPM);
 
         // create fixturedef for player collision box
         FixtureDef fdef = new FixtureDef();
@@ -89,31 +97,35 @@ public class Play extends GameState {
         fdef.density = 1;
         fdef.friction = 0;
         fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        //fdef.filter.maskBits = B2DVars.BIT_RED_BLOCK | B2DVars.BIT_CRYSTAL | B2DVars.BIT_SPIKE;
+
 
         // create player collision box fixture
-        playerbody.createFixture(fdef);
+        body.createFixture(fdef);
         shape.dispose();
 
         // create box shape for player foot
         shape = new PolygonShape();
-        shape.setAsBox(5 / PPM, 5 / PPM, new Vector2(0, -5 / PPM), 0);
-
+        shape.setAsBox(13 / PPM, 3 / PPM, new Vector2(0, -13 / PPM), 0);
 
         // create fixturedef for player foot
         fdef.shape = shape;
         fdef.isSensor = true;
         fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        //fdef.filter.maskBits = B2DVars.BIT_RED_BLOCK;
 
         // create player foot fixture
-        playerbody.createFixture(fdef).setUserData("foot");
+        body.createFixture(fdef).setUserData("foot");
         shape.dispose();
 
-        // manually set the player body mass to 1 kg
-        MassData md = playerbody.getMassData();
+        // create new player
+        player = new Player(body);
+        body.setUserData(player);
+
+        // final tweaks, manually set the player body mass to 1 kg
+        MassData md = body.getMassData();
         md.mass = 1;
-        playerbody.setMassData(md);
+        body.setMassData(md);
+
+
     }
 
     public void handleInput() {
