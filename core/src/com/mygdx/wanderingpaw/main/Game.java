@@ -50,7 +50,7 @@ public class Game implements ApplicationListener {
 
         res = new Content();
         //res.loadTexture("res/images/background_image.jpg");
-        res.loadTexture("res/images/cat_sprite.jpg","cat");
+        res.loadTexture("res/images/cat 146x32.png","cat");
 
 
         Gdx.input.setInputProcessor(new CustomizedInputProcessor());
@@ -85,7 +85,6 @@ public class Game implements ApplicationListener {
         }
         sb.setProjectionMatrix(hudCam.combined);
         sb.begin();
-        sb.draw(res.getTexture("cat"),0,0);
         sb.end();
 
     }

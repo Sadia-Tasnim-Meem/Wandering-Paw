@@ -17,12 +17,9 @@ public class Play extends GameState {
     private Box2DDebugRenderer b2dr;
     private OrthographicCamera b2dCam;
 
-    private Body playerBody;
     private CustomizedContactListener contactListener;
 
     private Player player;
-
-
 
 
     public Play(GameStateManager gsm) {
@@ -59,7 +56,6 @@ public class Play extends GameState {
         // PLAYER
 
 
-
         //create foot sensor
 /*        shape.setAsBox(2/ PPM, 2 / PPM, new Vector2(0, -5 /PPM), 0);
         fdef.shape = shape;
@@ -69,19 +65,20 @@ public class Play extends GameState {
         playerBody.createFixture(fdef).setUserData("foot");*/
 
 
-
         // set up box2d cam
         b2dCam = new OrthographicCamera();
         b2dCam.setToOrtho(false, Game.V_WIDTH / PPM, Game.V_HEIGHT / PPM);
 
     }
 
-    public void createPlayer(){
+    public void createPlayer() {
         // create bodydef
         BodyDef bdef = new BodyDef();
         bdef.type = BodyDef.BodyType.DynamicBody;
         bdef.position.set(60 / PPM, 120 / PPM);
         bdef.fixedRotation = true;
+        bdef.linearVelocity.set(1, 0);
+
 
 
         // create body from bodydef
@@ -131,9 +128,9 @@ public class Play extends GameState {
     public void handleInput() {
         // player jump
 
-        if(CustomizedInput.isPressed(CustomizedInput.BUTTON1)){
-            if(contactListener.isPlayerOnGround()){
-                playerBody.applyForceToCenter(0, 160, true );
+        if (CustomizedInput.isPressed(CustomizedInput.BUTTON1)) {
+            if (contactListener.isPlayerOnGround()) {
+                player.getBody().applyForceToCenter(0, 160, true);
             }
 
         }
@@ -144,15 +141,17 @@ public class Play extends GameState {
 
         handleInput();
         world.step(dt, 6, 2);
+        player.update(dt);
 
     }
 
     public void render() {
-// /*       sb.setProjectionMatrix(cam.combined);
-//        sb.begin();
-//        sb.end();*/
+        sb.setProjectionMatrix(cam.combined);
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        player.render(sb);
+
         b2dr.render(world, b2dCam.combined);
     }
 
