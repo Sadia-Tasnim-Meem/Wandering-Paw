@@ -6,10 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.wanderingpaw.handlers.Content;
-import com.mygdx.wanderingpaw.handlers.CustomizedInput;
-import com.mygdx.wanderingpaw.handlers.CustomizedInputProcessor;
-import com.mygdx.wanderingpaw.handlers.GameStateManager;
+import com.mygdx.wanderingpaw.handlers.*;
 
 
 public class Game implements ApplicationListener {
@@ -27,14 +24,14 @@ public class Game implements ApplicationListener {
 
 
     private SpriteBatch sb;
-    private OrthographicCamera cam;
+    private BoundedCamera cam;
     private OrthographicCamera hudCam;
 
     public SpriteBatch getSpriteBatch() {
         return sb;
     }
 
-    public OrthographicCamera getCamera() {
+    public BoundedCamera getCamera() {
         return cam;
     }
 
@@ -56,7 +53,7 @@ public class Game implements ApplicationListener {
         Gdx.input.setInputProcessor(new CustomizedInputProcessor());
 
         sb = new SpriteBatch();
-        cam = new OrthographicCamera();
+        cam = new BoundedCamera();
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
 
         hudCam = new OrthographicCamera();
