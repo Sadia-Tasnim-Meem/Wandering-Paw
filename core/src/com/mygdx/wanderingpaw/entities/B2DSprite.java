@@ -25,6 +25,7 @@ public class B2DSprite {
     }
 
     public void setAnimation(TextureRegion reg, float delay) {
+
         setAnimation(new TextureRegion[]{reg}, delay);
     }
 
@@ -35,6 +36,7 @@ public class B2DSprite {
     }
 
     public void update(float dt) {
+
         animation.update(dt);
     }
 

@@ -12,7 +12,8 @@ public class Player extends B2DSprite {
         Texture tex = Game.res.getTexture("cat");
         TextureRegion[] sprites = new TextureRegion[4];
         for (int i = 0; i < sprites.length; i++) {
-            if (i == 0) {
+            sprites[i] = new TextureRegion(tex, 0, 0, 32, 32);
+            /*if (i == 0) {
                 sprites[i] = new TextureRegion(tex, 0, 0, 32, 32);
             }
 
@@ -26,7 +27,7 @@ public class Player extends B2DSprite {
 
             if (i == 3) {
                 sprites[i] = new TextureRegion(tex, 32 + 37 + 39, 0, 38, 32);
-            }
+            }*/
         }
 
         animation.setFrames(sprites, 1 / 12f);

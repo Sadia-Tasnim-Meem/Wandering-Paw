@@ -25,6 +25,8 @@ public class Play extends GameState {
 
     private TiledMap tileMap;
     private float tileSize;
+    private int tileMapWidth;
+    private  int tileMapHeight;
     private OrthogonalTiledMapRenderer tiledMapRenderer;
     private Player player;
 
@@ -47,29 +49,14 @@ public class Play extends GameState {
         //create backgrounds
         Texture bgs = Game.res.getTexture("background-image.png");
 
-        //PLATFORM
-
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
 
-        // PLAYER
-
-
-        //create foot sensor
-/*        shape.setAsBox(2/ PPM, 2 / PPM, new Vector2(0, -5 /PPM), 0);
-        fdef.shape = shape;
-        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_GROUND;
-        fdef.isSensor = true;
-        playerBody.createFixture(fdef).setUserData("foot");*/
-
-
         // set up box2d cam
         b2dCam = new BoundedCamera();
         b2dCam.setToOrtho(false, Game.V_WIDTH / PPM, Game.V_HEIGHT / PPM);
-
-        /////////////////
+        b2dCam.setBounds(0, (tileMapWidth * tileSize) / PPM, 0, (tileMapHeight * tileSize) / PPM);
 
         //going through all the cells in the layer
 
@@ -79,17 +66,23 @@ public class Play extends GameState {
     private void createTiles() {
         //TileMap
 
-        tileMap = new TmxMapLoader().load("res/images/untitled.tmx");
+        tileMap = new TmxMapLoader().load("res/images/Test1.tmx");
+        tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
+        tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
+        tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tileMap);
 
-        tileSize = (int) tileMap.getProperties().get("tilewidth");
+        //tileSize = (int) tileMap.getProperties().get("tilewidth");
 
         TiledMapTileLayer layer;
-        layer = (TiledMapTileLayer) tileMap.getLayers().get("Layer");
+        layer = (TiledMapTileLayer) tileMap.getLayers().get("Tile Layer 1");
         createLayers(layer, B2DVars.BIT_GROUND);
     }
 
     private void createLayers(TiledMapTileLayer layer, short bits) {
+        //tilesize
+        tileSize = layer.getTileWidth();
+
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
 
@@ -121,9 +114,9 @@ public class Play extends GameState {
                 fdef.shape = chainShape;
                 fdef.filter.categoryBits = bits;
                 fdef.filter.maskBits = B2DVars.BIT_PLAYER;
-                fdef.isSensor = false;
+                //fdef.isSensor = false;
                 world.createBody(bdef).createFixture(fdef);
-
+                chainShape.dispose();
 
             }
         }
@@ -198,28 +191,33 @@ public class Play extends GameState {
     public void update(float dt) {
 
         handleInput();
-        world.step(dt, 6, 2);
+        //world.step(dt, 6, 2);
+        // update box2d world
+        world.step(Game.STEP, 1, 1);
         player.update(dt);
 
     }
 
     public void render() {
-
-
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        tiledMapRenderer.setView(cam);
-        tiledMapRenderer.render();
+        //camera follow player
+        cam.setPosition(player.getPosition().x * PPM + Game.V_WIDTH / 4, Game.V_HEIGHT / 2,0);
+        cam.update();
 
+        //draw player
         sb.setProjectionMatrix(cam.combined);
         player.render(sb);
 
-        b2dr.render(world, cam.combined);
+        //draw tilemap
+        tiledMapRenderer.setView(cam);
+        tiledMapRenderer.render();
 
-//        //camera following player
-//
-//        b2dCam.setPosition(player.getPosition().x * PPM + Game.V_WIDTH / 4, Game.V_HEIGHT / 2);
-//        b2dCam.update();
+        //b2dr.render(world, cam.combined);
+        b2dCam.setPosition(player.getPosition().x + Game.V_WIDTH / 4 /PPM , Game.V_HEIGHT / 2 /PPM );
+        b2dCam.update();
+        b2dr.render(world, b2dCam.combined);
+
     }
 
     public void dispose() {

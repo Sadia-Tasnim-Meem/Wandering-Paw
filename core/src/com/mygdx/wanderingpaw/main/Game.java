@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.wanderingpaw.handlers.*;
 
+import static com.mygdx.wanderingpaw.handlers.B2DVars.PPM;
+
 
 public class Game implements ApplicationListener {
 
@@ -83,6 +85,7 @@ public class Game implements ApplicationListener {
         sb.setProjectionMatrix(hudCam.combined);
         sb.begin();
         sb.end();
+
 
     }
 
