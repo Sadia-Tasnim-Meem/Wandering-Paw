@@ -12,8 +12,8 @@ public abstract class GameState {
     protected Game game;
 
     protected SpriteBatch sb;
-    protected BoundedCamera cam;
-    protected OrthographicCamera hudCam;
+    protected OrthographicCamera cam;//follows the player
+    protected OrthographicCamera hudCam;//stays at the origin
 
     protected GameState(GameStateManager gsm){
         this.gsm = gsm;

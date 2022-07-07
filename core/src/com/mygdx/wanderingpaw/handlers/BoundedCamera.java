@@ -13,6 +13,7 @@ public class BoundedCamera extends OrthographicCamera {
     private float ymax;
 
     public BoundedCamera() {
+
         this(0, 0, 0, 0);
     }
 
@@ -29,6 +30,7 @@ public class BoundedCamera extends OrthographicCamera {
     }
 
     public void setPosition(float x, float y) {
+
         setPosition(x, y, 0);
     }
 

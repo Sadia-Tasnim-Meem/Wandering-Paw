@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.wanderingpaw.entities.HUD;
 import com.mygdx.wanderingpaw.entities.Player;
 import com.mygdx.wanderingpaw.handlers.*;
 import com.mygdx.wanderingpaw.main.Game;
@@ -18,18 +19,20 @@ import com.mygdx.wanderingpaw.main.Game;
 import static com.mygdx.wanderingpaw.handlers.B2DVars.PPM;
 
 public class Play extends GameState {
+    public boolean debug = false;
     private World world;
     private Box2DDebugRenderer b2dr;
-    private BoundedCamera b2dCam;
     private CustomizedContactListener contactListener;
 
+    private BoundedCamera b2dCam;
+    private Player player;
     private TiledMap tileMap;
-    private float tileSize;
     private int tileMapWidth;
     private  int tileMapHeight;
+    private float tileSize;
     private OrthogonalTiledMapRenderer tiledMapRenderer;
-    private Player player;
 
+    private HUD hud;
 
     public Play(GameStateManager gsm) {
 
@@ -46,23 +49,28 @@ public class Play extends GameState {
 
         createTiles();
 
+        ((BoundedCamera) cam).setBounds(0, tileMapWidth * tileSize, 0, tileMapHeight * tileSize);
+
         //create backgrounds
         Texture bgs = Game.res.getTexture("background-image.png");
 
-        BodyDef bdef = new BodyDef();
+        /*BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
-        PolygonShape shape = new PolygonShape();
+        PolygonShape shape = new PolygonShape();*/
+
+        //create hud
+        hud = new HUD(player);
 
         // set up box2d cam
         b2dCam = new BoundedCamera();
         b2dCam.setToOrtho(false, Game.V_WIDTH / PPM, Game.V_HEIGHT / PPM);
         b2dCam.setBounds(0, (tileMapWidth * tileSize) / PPM, 0, (tileMapHeight * tileSize) / PPM);
 
-        //going through all the cells in the layer
-
-
     }
-
+    /**
+     * Sets up the tile map collidable tiles.
+     * Reads in tile map layers and sets up box2d bodies.
+     */
     private void createTiles() {
         //TileMap
 
@@ -79,6 +87,14 @@ public class Play extends GameState {
         createLayers(layer, B2DVars.BIT_GROUND);
     }
 
+    /**
+     * Creates box2d bodies for all non-null tiles
+     * in the specified layer and assigns the specified
+     * category bits.
+     *
+     * @param layer the layer being read
+     * @param bits  category bits assigned to fixtures
+     */
     private void createLayers(TiledMapTileLayer layer, short bits) {
         //tilesize
         tileSize = layer.getTileWidth();
@@ -86,6 +102,7 @@ public class Play extends GameState {
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
 
+        // go through all cells in layer
         for (int row = 0; row < layer.getHeight(); row++) {
             for (int col = 0; col < layer.getWidth(); col++) {
 
@@ -122,6 +139,10 @@ public class Play extends GameState {
         }
     }
 
+    /**
+     * Creates the player.
+     * Sets up the box2d body and sprites.
+     */
     public void createPlayer() {
         // create bodydef
         BodyDef bdef = new BodyDef();
@@ -164,7 +185,6 @@ public class Play extends GameState {
         shape.dispose();
 
         // create new player
-
         player = new Player(body);
         body.setUserData(player);
 
@@ -183,40 +203,47 @@ public class Play extends GameState {
             if (contactListener.isPlayerOnGround()) {
                 player.getBody().applyForceToCenter(0, 160, true);
             }
-
         }
-
     }
 
     public void update(float dt) {
-
+        //check input
         handleInput();
+
         //world.step(dt, 6, 2);
+
         // update box2d world
         world.step(Game.STEP, 1, 1);
-        player.update(dt);
+
+        //update player
+        this.player.update(dt);
+
+
 
     }
 
     public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //camera follow player
-        cam.setPosition(player.getPosition().x * PPM + Game.V_WIDTH / 4, Game.V_HEIGHT / 2,0);
+        // camera follow player
+        ((BoundedCamera) cam).setPosition(player.getPosition().x * PPM + Game.V_WIDTH / 4, Game.V_HEIGHT / 2);
         cam.update();
-
-        //draw player
-        sb.setProjectionMatrix(cam.combined);
-        player.render(sb);
-
-        //draw tilemap
+        // draw tilemap
         tiledMapRenderer.setView(cam);
         tiledMapRenderer.render();
+        // draw player
+        sb.setProjectionMatrix(cam.combined);
+        player.render(sb);
+        // draw hud
+        sb.setProjectionMatrix(hudCam.combined);
+        hud.render(sb);
 
-        //b2dr.render(world, cam.combined);
-        b2dCam.setPosition(player.getPosition().x + Game.V_WIDTH / 4 /PPM , Game.V_HEIGHT / 2 /PPM );
-        b2dCam.update();
-        b2dr.render(world, b2dCam.combined);
+        // debug draw box2d
+        if (debug) {
+            b2dCam.setPosition(player.getPosition().x + Game.V_WIDTH / 4 / PPM, Game.V_HEIGHT / 2 / PPM);
+            b2dCam.update();
+            b2dr.render(world, b2dCam.combined);
+        }
 
     }
 
