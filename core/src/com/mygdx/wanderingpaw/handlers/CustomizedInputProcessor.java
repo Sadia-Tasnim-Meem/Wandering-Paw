@@ -9,13 +9,22 @@ public class CustomizedInputProcessor extends InputAdapter {
     //key pressed
     public boolean keyDown(int k) {
 
-        if (k == Input.Keys.Z) {
+        if (k == Input.Keys.W) {
             CustomizedInput.setKey(CustomizedInput.BUTTON1, true);
         }
 
-        if (k == Input.Keys.X) {
+        if (k == Input.Keys.S) {
             CustomizedInput.setKey(CustomizedInput.BUTTON2, true);
         }
+
+        if (k == Input.Keys.D) {
+            CustomizedInput.setKey(CustomizedInput.BUTTON3, true);
+        }
+
+        if (k == Input.Keys.A) {
+            CustomizedInput.setKey(CustomizedInput.BUTTON4, true);
+        }
+
         return true;
     }
 
@@ -23,12 +32,20 @@ public class CustomizedInputProcessor extends InputAdapter {
     //key released
     public boolean keyUp(int k) {
 
-        if (k == Input.Keys.Z) {
+        if (k == Input.Keys.W) {
             CustomizedInput.setKey(CustomizedInput.BUTTON1, false);
         }
 
-        if (k == Input.Keys.X) {
+        if (k == Input.Keys.S) {
             CustomizedInput.setKey(CustomizedInput.BUTTON2, false);
+        }
+
+        if (k == Input.Keys.D) {
+            CustomizedInput.setKey(CustomizedInput.BUTTON3, false);
+        }
+
+        if (k == Input.Keys.A) {
+            CustomizedInput.setKey(CustomizedInput.BUTTON4, false);
         }
 
         return true;

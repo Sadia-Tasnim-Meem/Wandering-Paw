@@ -28,7 +28,7 @@ public class Play extends GameState {
     private Player player;
     private TiledMap tileMap;
     private int tileMapWidth;
-    private  int tileMapHeight;
+    private int tileMapHeight;
     private float tileSize;
     private OrthogonalTiledMapRenderer tiledMapRenderer;
 
@@ -67,6 +67,7 @@ public class Play extends GameState {
         b2dCam.setBounds(0, (tileMapWidth * tileSize) / PPM, 0, (tileMapHeight * tileSize) / PPM);
 
     }
+
     /**
      * Sets up the tile map collidable tiles.
      * Reads in tile map layers and sets up box2d bodies.
@@ -74,7 +75,7 @@ public class Play extends GameState {
     private void createTiles() {
         //TileMap
 
-        tileMap = new TmxMapLoader().load("res/images/Test1.tmx");
+        tileMap = new TmxMapLoader().load("res/images/test 2.tmx");
         tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
         tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
         tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
@@ -149,7 +150,7 @@ public class Play extends GameState {
         bdef.type = BodyDef.BodyType.DynamicBody;
         bdef.position.set(60 / PPM, 120 / PPM);
         bdef.fixedRotation = true;
-        bdef.linearVelocity.set(1, 0);
+        //bdef.linearVelocity.set(1, 0);
 
 
         // create body from bodydef
@@ -204,6 +205,16 @@ public class Play extends GameState {
                 player.getBody().applyForceToCenter(0, 160, true);
             }
         }
+
+        if (CustomizedInput.isPressed(CustomizedInput.BUTTON3)) {
+            player.getBody().applyForceToCenter(50, 0, true);
+
+        }
+
+        if (CustomizedInput.isPressed(CustomizedInput.BUTTON4)) {
+            player.getBody().applyForceToCenter(-50, 0, true);
+        }
+
     }
 
     public void update(float dt) {
@@ -217,7 +228,6 @@ public class Play extends GameState {
 
         //update player
         this.player.update(dt);
-
 
 
     }

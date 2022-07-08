@@ -5,10 +5,14 @@ public class CustomizedInput {
     public static boolean[] keys;   //current key
     public static boolean[] pkeys;  //previous used key
 
-    public static final int NUM_KEYS = 2;
+    public static final int NUM_KEYS = 4;
 
     public static final int BUTTON1 = 0;
     public static final int BUTTON2 = 1;
+
+    public static final int BUTTON3 = 2;
+
+    public static final int BUTTON4 = 3;
 
     static {
         keys = new boolean[NUM_KEYS];
