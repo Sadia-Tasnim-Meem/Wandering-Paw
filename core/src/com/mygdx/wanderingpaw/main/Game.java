@@ -17,7 +17,7 @@ public class Game implements ApplicationListener {
     public static final int V_WIDTH = 320;
     public static final int V_HEIGHT = 240;
 
-    public static final int SCALE = 2;
+    public static final int SCALE = 3;
     public static final float STEP = 1 / 60f;
 
     private SpriteBatch sb;
@@ -34,7 +34,7 @@ public class Game implements ApplicationListener {
 
         res = new Content();
         //res.loadTexture("res/images/background_image.jpg");
-        res.loadTexture("res/images/cat_sprite(128x32).png","cat");
+        res.loadTexture("res/images/cat sprite 128x32.png","cat");
 
 
         //Gdx.input.setInputProcessor(new CustomizedInputProcessor());
