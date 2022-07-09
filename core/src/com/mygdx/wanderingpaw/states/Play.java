@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -32,6 +33,7 @@ public class Play extends GameState {
     private int tileMapHeight;
     private float tileSize;
     private OrthogonalTiledMapRenderer tiledMapRenderer;
+    private Background[] backgrounds;
 
     private HUD hud;
 
@@ -49,13 +51,15 @@ public class Play extends GameState {
         createPlayer();
 
         createTiles();
-
         ((BoundedCamera) cam).setBounds(0, tileMapWidth * tileSize, 0, tileMapHeight * tileSize);
 
         //create backgrounds
-        Texture bgs = Game.res.getTexture("background-image.png");
-
-//        BodyDef bdef = new BodyDef();
+        TextureRegion sky = new TextureRegion(Game.res.getTexture("sky-image"), 0, 0, 1280, 720);
+        TextureRegion fence = new TextureRegion(Game.res.getTexture("fence-image"), 0, 0, 320, 240);
+        backgrounds = new Background[1];
+        backgrounds[0] = new Background(sky, cam, 0f);
+        //backgrounds[1] = new Background(fence, cam,0.1f);
+        //        BodyDef bdef = new BodyDef();
 //        FixtureDef fdef = new FixtureDef();
 //        PolygonShape shape = new PolygonShape();
 
@@ -76,7 +80,8 @@ public class Play extends GameState {
     private void createTiles() {
         //TileMap
 
-        tileMap = new TmxMapLoader().load("res/images/tile with grass.tmx");
+        //tileMap = new TmxMapLoader().load("res/images/Test1.tmx");
+        tileMap = new TmxMapLoader().load("res/images/test1_for1280x720.tmx");
         tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
         tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
         tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
@@ -149,7 +154,7 @@ public class Play extends GameState {
         // create bodydef
         BodyDef bdef = new BodyDef();
         bdef.type = BodyDef.BodyType.DynamicBody;
-        bdef.position.set(60 / PPM, 120 / PPM);
+        bdef.position.set(60*3 / PPM, 120*3 / PPM);
         bdef.fixedRotation = true;
         //bdef.linearVelocity.set(1, 0);
 
@@ -159,7 +164,7 @@ public class Play extends GameState {
 
         // create box shape for player collision box
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(13 / PPM, 13 / PPM);
+        shape.setAsBox(13*3 / PPM, 13*3 / PPM);
 
         // create fixturedef for player collision box
         FixtureDef fdef = new FixtureDef();
@@ -175,7 +180,7 @@ public class Play extends GameState {
 
         // create box shape for player foot
         shape = new PolygonShape();
-        shape.setAsBox(13 / PPM, 2 / PPM, new Vector2(0, -13 / PPM), 0);
+        shape.setAsBox(13*3 / PPM, 2*3 / PPM, new Vector2(0, -13*3 / PPM), 0);
 
         // create fixturedef for player foot
         fdef.shape = shape;
@@ -202,14 +207,24 @@ public class Play extends GameState {
 
     }
 
+    private void playerJump() {
+        if (contactListener.playerCanJump()) {
+            player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
+            player.getBody().applyForceToCenter(0, 200, true);
+        }
+    }
+
     public void handleInput() {
         // player jump
-
         if (CustomizedInput.isPressed(CustomizedInput.BUTTON1)) {
+            playerJump();
+        }
+
+        /*if (CustomizedInput.isPressed(CustomizedInput.BUTTON1)) {
             if (contactListener.isPlayerOnGround()) {
                 player.getBody().applyForceToCenter(0, 160, true);
             }
-        }
+        }*/
 
         if (CustomizedInput.isPressed(CustomizedInput.BUTTON3)) {
 
@@ -268,6 +283,12 @@ public class Play extends GameState {
         // camera follow player
         ((BoundedCamera) cam).setPosition(player.getPosition().x * PPM + Game.V_WIDTH / 4, Game.V_HEIGHT / 2);
         cam.update();
+
+        // draw bgs
+        sb.setProjectionMatrix(hudCam.combined);
+        for (Background background : backgrounds) {
+            background.render(sb);
+        }
         // draw tilemap
         tiledMapRenderer.setView(cam);
         tiledMapRenderer.render();

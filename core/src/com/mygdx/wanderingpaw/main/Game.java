@@ -12,12 +12,10 @@ import static com.mygdx.wanderingpaw.handlers.B2DVars.PPM;
 
 
 public class Game implements ApplicationListener {
+    public static final int V_WIDTH = 1280; //320
+    public static final int V_HEIGHT = 720;//240
 
-
-    public static final int V_WIDTH = 320;
-    public static final int V_HEIGHT = 240;
-
-    public static final int SCALE = 3;
+    public static final int SCALE = 2;
     public static final float STEP = 1 / 60f;
 
     private SpriteBatch sb;
@@ -33,8 +31,11 @@ public class Game implements ApplicationListener {
         Gdx.input.setInputProcessor(new CustomizedInputProcessor());
 
         res = new Content();
-        //res.loadTexture("res/images/background_image.jpg");
-        res.loadTexture("res/images/cat sprite 128x32.png","cat");
+        res.loadTexture("res/images/background_image.jpg", "background");
+        //res.loadTexture("res/images/cat sprite 128x32.png","cat");
+        res.loadTexture("res/images/cat_sprite(960x96).png","cat");
+        res.loadTexture("res/images/sky_s1280x720.jpg","sky-image");
+        res.loadTexture("res/images/fence.png","fence-image");
 
 
         //Gdx.input.setInputProcessor(new CustomizedInputProcessor());

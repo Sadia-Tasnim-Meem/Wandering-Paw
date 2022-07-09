@@ -8,7 +8,7 @@ import com.mygdx.wanderingpaw.main.Game;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setWindowedMode(Game.V_WIDTH * Game.SCALE, Game.V_HEIGHT * Game.SCALE);
+		config.setWindowedMode(Game.V_WIDTH ,Game.V_HEIGHT );
 		config.setResizable(false);
 		config.setForegroundFPS(60);
 		config.setTitle("Wandering Paw");

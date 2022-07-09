@@ -13,5 +13,4 @@ public class HUD {
         sb.begin();
         sb.end();
     }
-
 }

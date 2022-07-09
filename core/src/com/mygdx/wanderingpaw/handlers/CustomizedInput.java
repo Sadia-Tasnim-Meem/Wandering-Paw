@@ -9,10 +9,9 @@ public class CustomizedInput {
 
     public static final int BUTTON1 = 0;
     public static final int BUTTON2 = 1;
-
     public static final int BUTTON3 = 2;
-
     public static final int BUTTON4 = 3;
+
 
     static {
         keys = new boolean[NUM_KEYS];

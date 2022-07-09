@@ -47,6 +47,9 @@ public class CustomizedContactListener implements ContactListener {
         }
 
     }
+    public boolean playerCanJump() {
+        return numFootContacts > 0;
+    }
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
