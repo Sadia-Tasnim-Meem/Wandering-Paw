@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -54,9 +55,9 @@ public class Play extends GameState {
         //create backgrounds
         Texture bgs = Game.res.getTexture("background-image.png");
 
-        /*BodyDef bdef = new BodyDef();
-        FixtureDef fdef = new FixtureDef();
-        PolygonShape shape = new PolygonShape();*/
+//        BodyDef bdef = new BodyDef();
+//        FixtureDef fdef = new FixtureDef();
+//        PolygonShape shape = new PolygonShape();
 
         //create hud
         hud = new HUD(player);
@@ -75,7 +76,7 @@ public class Play extends GameState {
     private void createTiles() {
         //TileMap
 
-        tileMap = new TmxMapLoader().load("res/images/test 2.tmx");
+        tileMap = new TmxMapLoader().load("res/images/tile with grass.tmx");
         tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
         tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
         tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
@@ -197,6 +198,10 @@ public class Play extends GameState {
 
     }
 
+    private void renderBackground(){
+
+    }
+
     public void handleInput() {
         // player jump
 
@@ -207,12 +212,37 @@ public class Play extends GameState {
         }
 
         if (CustomizedInput.isPressed(CustomizedInput.BUTTON3)) {
+
             player.getBody().applyForceToCenter(50, 0, true);
+
+//            if (player.getBody().getLinearVelocity().equals(new Vector2(new Vector2(-1, 0))))
+//                player.getBody().setLinearVelocity(new Vector2(new Vector2(0, 0)));
+//
+//            else if (player.getBody().getLinearVelocity().equals(new Vector2(new Vector2(-1, 1))))
+//                player.getBody().setLinearVelocity(new Vector2(new Vector2(0, 0)));
+//
+//            else if (player.getBody().getLinearVelocity().equals(new Vector2(new Vector2(0, 0))))
+//                player.getBody().setLinearVelocity(new Vector2(new Vector2(1, 0)));
+//
+//            else if (player.getBody().getLinearVelocity().equals(new Vector2(new Vector2(0, 1))))
+//                player.getBody().setLinearVelocity(new Vector2(new Vector2(1, 0)));
 
         }
 
         if (CustomizedInput.isPressed(CustomizedInput.BUTTON4)) {
+
             player.getBody().applyForceToCenter(-50, 0, true);
+//            if (player.getBody().getLinearVelocity().equals(new Vector2(new Vector2(0, 0))))
+//                player.getBody().setLinearVelocity(new Vector2(new Vector2(-1, 0)));
+//            else if (player.getBody().getLinearVelocity().equals(new Vector2(new Vector2(0, 1))))
+//                player.getBody().setLinearVelocity(new Vector2(new Vector2(-1, 0)));
+//
+//            else if (player.getBody().getLinearVelocity().equals(new Vector2(new Vector2(1, 0))))
+//                player.getBody().setLinearVelocity(new Vector2(new Vector2(0, 0)));
+//
+//            else if (player.getBody().getLinearVelocity().equals(new Vector2(new Vector2(1, 1))))
+//                player.getBody().setLinearVelocity(new Vector2(new Vector2(0, 0)));
+
         }
 
     }
@@ -247,6 +277,7 @@ public class Play extends GameState {
         // draw hud
         sb.setProjectionMatrix(hudCam.combined);
         hud.render(sb);
+
 
         // debug draw box2d
         if (debug) {
