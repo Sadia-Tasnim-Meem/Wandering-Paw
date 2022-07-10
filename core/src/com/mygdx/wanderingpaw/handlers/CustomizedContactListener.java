@@ -48,7 +48,7 @@ public class CustomizedContactListener implements ContactListener {
 
     }
     public boolean playerCanJump() {
-        return numFootContacts > 0;
+        return numFootContacts >= 0;
     }
 
     @Override

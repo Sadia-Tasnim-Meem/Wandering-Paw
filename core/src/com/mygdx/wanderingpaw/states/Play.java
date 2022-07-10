@@ -1,6 +1,7 @@
 package com.mygdx.wanderingpaw.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -36,13 +37,14 @@ public class Play extends GameState {
     private Background[] backgrounds;
 
     private HUD hud;
+    private int JumpCounter = 0;
 
     public Play(GameStateManager gsm) {
 
         super(gsm);
 
         //set up box2d world and contact listener
-        world = new World(new Vector2(0, -9.81f), true);
+        world = new World(new Vector2(0, -25f), true);
         contactListener = new CustomizedContactListener();
         world.setContactListener(contactListener);
         b2dr = new Box2DDebugRenderer();
@@ -58,10 +60,6 @@ public class Play extends GameState {
         TextureRegion fence = new TextureRegion(Game.res.getTexture("fence-image"), 0, 0, 320, 240);
         backgrounds = new Background[1];
         backgrounds[0] = new Background(sky, cam, 0f);
-        //backgrounds[1] = new Background(fence, cam,0.1f);
-        //        BodyDef bdef = new BodyDef();
-//        FixtureDef fdef = new FixtureDef();
-//        PolygonShape shape = new PolygonShape();
 
         //create hud
         hud = new HUD(player);
@@ -207,59 +205,56 @@ public class Play extends GameState {
 
     }
 
-    private void playerJump() {
-        if (contactListener.playerCanJump()) {
-            player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
-            player.getBody().applyForceToCenter(0, 200, true);
-        }
-    }
 
     public void handleInput() {
-        // player jump
+        /*// player jump
         if (CustomizedInput.isPressed(CustomizedInput.BUTTON1)) {
-            playerJump();
+            //playerJump();
+            if (contactListener.playerCanJump() && JumpCounter<2) {
+                //player.getBody().applyForceToCenter(0, 400, true);
+                //player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
+                float force = player.getBody().getMass() * 10;
+
+                player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
+                player.getBody().applyLinearImpulse(new Vector2(0, force), player.getPosition(), true);
+                JumpCounter++;
+
+            }
+            if(player.getBody().getLinearVelocity().y == 0)JumpCounter = 0;
         }
 
-        /*if (CustomizedInput.isPressed(CustomizedInput.BUTTON1)) {
-            if (contactListener.isPlayerOnGround()) {
-                player.getBody().applyForceToCenter(0, 160, true);
-            }
-        }*/
+
 
         if (CustomizedInput.isPressed(CustomizedInput.BUTTON3)) {
 
-            player.getBody().applyForceToCenter(50, 0, true);
-
-//            if (player.getBody().getLinearVelocity().equals(new Vector2(new Vector2(-1, 0))))
-//                player.getBody().setLinearVelocity(new Vector2(new Vector2(0, 0)));
-//
-//            else if (player.getBody().getLinearVelocity().equals(new Vector2(new Vector2(-1, 1))))
-//                player.getBody().setLinearVelocity(new Vector2(new Vector2(0, 0)));
-//
-//            else if (player.getBody().getLinearVelocity().equals(new Vector2(new Vector2(0, 0))))
-//                player.getBody().setLinearVelocity(new Vector2(new Vector2(1, 0)));
-//
-//            else if (player.getBody().getLinearVelocity().equals(new Vector2(new Vector2(0, 1))))
-//                player.getBody().setLinearVelocity(new Vector2(new Vector2(1, 0)));
+            player.getBody().setLinearVelocity(2,0);
+            if(CustomizedInput.isDown(CustomizedInput.BUTTON1)){
+                    player.getBody().applyForceToCenter(50, 0, true);
+            }
 
         }
 
         if (CustomizedInput.isPressed(CustomizedInput.BUTTON4)) {
 
-            player.getBody().applyForceToCenter(-50, 0, true);
-//            if (player.getBody().getLinearVelocity().equals(new Vector2(new Vector2(0, 0))))
-//                player.getBody().setLinearVelocity(new Vector2(new Vector2(-1, 0)));
-//            else if (player.getBody().getLinearVelocity().equals(new Vector2(new Vector2(0, 1))))
-//                player.getBody().setLinearVelocity(new Vector2(new Vector2(-1, 0)));
-//
-//            else if (player.getBody().getLinearVelocity().equals(new Vector2(new Vector2(1, 0))))
-//                player.getBody().setLinearVelocity(new Vector2(new Vector2(0, 0)));
-//
-//            else if (player.getBody().getLinearVelocity().equals(new Vector2(new Vector2(1, 1))))
-//                player.getBody().setLinearVelocity(new Vector2(new Vector2(0, 0)));
+            player.getBody().setLinearVelocity(-2,0);
 
         }
-
+         */
+        if(Gdx.input.isKeyPressed(Input.Keys.D)){
+            player.getBody().setLinearVelocity(2,0);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.A)){
+            player.getBody().setLinearVelocity(-2,0);
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.W) && JumpCounter<2){
+            float force = player.getBody().getMass() * 8;
+            player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
+            player.getBody().applyLinearImpulse(new Vector2(0, force), player.getBody().getPosition(), true);
+            JumpCounter++;
+        }
+        if(player.getBody().getLinearVelocity().y == 0) {
+            JumpCounter = 0;
+        }
     }
 
     public void update(float dt) {

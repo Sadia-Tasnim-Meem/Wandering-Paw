@@ -4,8 +4,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 
 public class CustomizedInputProcessor extends InputAdapter {
-
-
     //key pressed
     public boolean keyDown(int k) {
 
