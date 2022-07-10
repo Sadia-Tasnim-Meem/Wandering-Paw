@@ -39,6 +39,8 @@ public class Play extends GameState {
     private HUD hud;
     private int JumpCounter = 0;
 
+    public static int level;
+
     public Play(GameStateManager gsm) {
 
         super(gsm);

@@ -31,11 +31,11 @@ public class Game implements ApplicationListener {
         Gdx.input.setInputProcessor(new CustomizedInputProcessor());
 
         res = new Content();
-        res.loadTexture("res/images/background_image.jpg", "background");
-        //res.loadTexture("res/images/cat sprite 128x32.png","cat");
         res.loadTexture("res/images/cat_sprite(960x96).png","cat");
         res.loadTexture("res/images/sky_s1280x720.jpg","sky-image");
         res.loadTexture("res/images/fence.png","fence-image");
+        res.loadTexture("res/images/home screen.jpg","menu");
+
 
 
         //Gdx.input.setInputProcessor(new CustomizedInputProcessor());
