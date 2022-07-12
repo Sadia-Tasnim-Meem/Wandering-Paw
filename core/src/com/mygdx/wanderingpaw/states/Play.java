@@ -41,6 +41,8 @@ public class Play extends GameState {
 
     public static int level;
 
+    public static boolean[] levelunlocked = new boolean[4];
+
     public Play(GameStateManager gsm) {
 
         super(gsm);
@@ -71,6 +73,12 @@ public class Play extends GameState {
         b2dCam.setToOrtho(false, Game.V_WIDTH / PPM, Game.V_HEIGHT / PPM);
         b2dCam.setBounds(0, (tileMapWidth * tileSize) / PPM, 0, (tileMapHeight * tileSize) / PPM);
 
+        //level done initialization
+/*        for(int i=1; i<3; i++){
+            levelunlocked[i] = false;
+        }*/
+        Save.load();
+        levelunlocked = Save.gd.getlevelUnlocked();
     }
 
     /**
@@ -239,39 +247,7 @@ public class Play extends GameState {
 
 
     public void handleInput() {
-        /*// player jump
-        if (CustomizedInput.isPressed(CustomizedInput.BUTTON1)) {
-            //playerJump();
-            if (contactListener.playerCanJump() && JumpCounter<2) {
-                //player.getBody().applyForceToCenter(0, 400, true);
-                //player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
-                float force = player.getBody().getMass() * 10;
 
-                player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
-                player.getBody().applyLinearImpulse(new Vector2(0, force), player.getPosition(), true);
-                JumpCounter++;
-
-            }
-            if(player.getBody().getLinearVelocity().y == 0)JumpCounter = 0;
-        }
-
-
-
-        if (CustomizedInput.isPressed(CustomizedInput.BUTTON3)) {
-
-            player.getBody().setLinearVelocity(2,0);
-            if(CustomizedInput.isDown(CustomizedInput.BUTTON1)){
-                    player.getBody().applyForceToCenter(50, 0, true);
-            }
-
-        }
-
-        if (CustomizedInput.isPressed(CustomizedInput.BUTTON4)) {
-
-            player.getBody().setLinearVelocity(-2,0);
-
-        }
-         */
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
             player.getBody().setLinearVelocity(2,0);
         }
@@ -301,6 +277,18 @@ public class Play extends GameState {
         //update player
         this.player.update(dt);
 
+        // check player win
+        if (player.getBody().getPosition().x * B2DVars.PPM > tileMapWidth * tileSize) {
+
+            //levelunlocked[level] = true;
+            Save.gd.setlevelUnlocked(level);
+            if(level == 3){
+                Save.gd.init();
+                Save.save();
+            }
+            Save.save();
+            gsm.setState(GameStateManager.LEVEL_SELECT);
+        }
 
     }
 

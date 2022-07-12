@@ -51,6 +51,8 @@ public class Menu extends GameState {
         world = new World(new Vector2(0, -9.8f * 5), true);
         //world = new World(new Vector2(0, 0), true);
         b2dRenderer = new Box2DDebugRenderer();
+
+
     }
 
 
@@ -60,6 +62,9 @@ public class Menu extends GameState {
         // mouse/touch input
         if (newGame.isClicked()) {
             gsm.setState(GameStateManager.LEVEL_SELECT);
+        }
+        if(exit.isClicked()){
+            Gdx.app.exit();
         }
 
     }

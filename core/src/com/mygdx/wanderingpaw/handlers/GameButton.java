@@ -41,9 +41,6 @@ public class GameButton {
         width = reg.getRegionWidth();
         height = reg.getRegionHeight();
         vec = new Vector3();
-
-
-
     }
 
     public boolean isClicked() {
@@ -66,8 +63,7 @@ public class GameButton {
         } else {
             clicked = false;
         }
-        System.out.println("is Pressed" + CustomizedInput.isPressed());
-        System.out.println(vec.x + " " + (x-width/2));
+
     }
 
     public void render(SpriteBatch sb) {
