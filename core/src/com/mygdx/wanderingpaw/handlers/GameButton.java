@@ -1,6 +1,7 @@
 package com.mygdx.wanderingpaw.handlers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -41,14 +42,7 @@ public class GameButton {
         height = reg.getRegionHeight();
         vec = new Vector3();
 
-        Texture tex = Game.res.getTexture("hud");
-        font = new TextureRegion[11];
-        for (int i = 0; i < 6; i++) {
-            font[i] = new TextureRegion(tex, 32*3 + i * 9*3, 16*3, 9*3, 9*3);
-        }
-        for (int i = 0; i < 5; i++) {
-            font[i + 6] = new TextureRegion(tex, 32*3 + i * 9*3, 25*3, 9*3, 9*3);
-        }
+
 
     }
 
@@ -72,7 +66,8 @@ public class GameButton {
         } else {
             clicked = false;
         }
-
+        System.out.println("is Pressed" + CustomizedInput.isPressed());
+        System.out.println(vec.x + " " + (x-width/2));
     }
 
     public void render(SpriteBatch sb) {

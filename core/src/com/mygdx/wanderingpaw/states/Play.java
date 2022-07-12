@@ -78,20 +78,50 @@ public class Play extends GameState {
      * Reads in tile map layers and sets up box2d bodies.
      */
     private void createTiles() {
+        TiledMapTileLayer layer;
         //TileMap
 
         //tileMap = new TmxMapLoader().load("res/images/Test1.tmx");
-        tileMap = new TmxMapLoader().load("res/images/test1_for1280x720.tmx");
-        tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
-        tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
-        tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tileMap);
+        if(level == 1){
+            tileMap = new TmxMapLoader().load("res/images/test1_for1280x720.tmx");
+            tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
+            tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
+            tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
+            tiledMapRenderer = new OrthogonalTiledMapRenderer(tileMap);
+            layer = (TiledMapTileLayer) tileMap.getLayers().get("Tile Layer 1");
+            createLayers(layer, B2DVars.BIT_GROUND);
+        }
+        else if(level == 2){
+            tileMap = new TmxMapLoader().load("res/images/Test1.tmx");
+            tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
+            tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
+            tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
+            tiledMapRenderer = new OrthogonalTiledMapRenderer(tileMap);
+            layer = (TiledMapTileLayer) tileMap.getLayers().get("Tile Layer 1");
+            createLayers(layer, B2DVars.BIT_GROUND);
+        }
+        else if(level == 3){
+            tileMap = new TmxMapLoader().load("res/images/test 2.tmx");
+            tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
+            tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
+            tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
+            tiledMapRenderer = new OrthogonalTiledMapRenderer(tileMap);
+            layer = (TiledMapTileLayer) tileMap.getLayers().get("Tile Layer 1");
+            createLayers(layer, B2DVars.BIT_GROUND);
+        }
+        else if(level == 4){
+            tileMap = new TmxMapLoader().load("res/images/test.tmx");
+            tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
+            tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
+            tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
+            tiledMapRenderer = new OrthogonalTiledMapRenderer(tileMap);
+            layer = (TiledMapTileLayer) tileMap.getLayers().get("Tile Layer 1");
+            createLayers(layer, B2DVars.BIT_GROUND);
+        }
 
-        //tileSize = (int) tileMap.getProperties().get("tilewidth");
 
-        TiledMapTileLayer layer;
-        layer = (TiledMapTileLayer) tileMap.getLayers().get("Tile Layer 1");
-        createLayers(layer, B2DVars.BIT_GROUND);
+
+
     }
 
     /**

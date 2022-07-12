@@ -35,6 +35,7 @@ public class Game implements ApplicationListener {
         res.loadTexture("res/images/sky_s1280x720.jpg","sky-image");
         res.loadTexture("res/images/fence.png","fence-image");
         res.loadTexture("res/images/home screen.jpg","menu");
+        res.loadTexture("res/images/MenuButtons.png","Menu Buttons");
 
 
 

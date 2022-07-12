@@ -28,6 +28,9 @@ public class Menu extends GameState {
 
     private World world;
     private Box2DDebugRenderer b2dRenderer;
+    private GameButton newGame;
+    private GameButton resume;
+    private GameButton exit;
 
 
     public Menu(GameStateManager gsm) {
@@ -38,6 +41,10 @@ public class Menu extends GameState {
         bg = new Background(new TextureRegion(tex), cam, 1f);
         bg.setVector(-20, 0);
 
+        tex = Game.res.getTexture("Menu Buttons");
+        newGame = new GameButton(new TextureRegion(tex, 0, 0, 233, 96), (Game.V_WIDTH/10)*8, (Game.V_HEIGHT/7)*3, cam);
+        resume = new GameButton(new  TextureRegion(tex, 0, 96, 233, 96),(Game.V_WIDTH/10)*8, (Game.V_HEIGHT/7)*2,cam);
+        exit = new GameButton(new  TextureRegion(tex, 0, 96*2, 233, 96),(Game.V_WIDTH/10)*8, (Game.V_HEIGHT/7),cam);
 
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
 
@@ -51,8 +58,8 @@ public class Menu extends GameState {
     public void handleInput() {
 
         // mouse/touch input
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            gsm.setState(GameStateManager.PLAY);
+        if (newGame.isClicked()) {
+            gsm.setState(GameStateManager.LEVEL_SELECT);
         }
 
     }
@@ -62,6 +69,9 @@ public class Menu extends GameState {
         handleInput();
 
         world.step(dt / 5, 8, 3);
+        newGame.update(dt);
+        resume.update(dt);
+        exit.update(dt);
 
     }
 
@@ -70,6 +80,10 @@ public class Menu extends GameState {
 
         // draw background
         bg.render(sb);
+        // draw button
+        newGame.render(sb);
+        resume.render(sb);
+        exit.render(sb);
     }
 
     public void dispose() {

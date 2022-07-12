@@ -1,5 +1,7 @@
 package com.mygdx.wanderingpaw.handlers;
 
+import com.badlogic.gdx.Gdx;
+
 public class CustomizedInput {
     public static int x;
     public static int y;
@@ -23,6 +25,7 @@ public class CustomizedInput {
     }
 
     public static void update() {
+        pdown = down;
         for (int i = 0; i < NUM_KEYS; i++) {
             pkeys[i] = keys[i];
         }
@@ -46,6 +49,5 @@ public class CustomizedInput {
     public static boolean isPressed(int i) {
         return keys[i] && !pkeys[i];
     }
-
 
 }

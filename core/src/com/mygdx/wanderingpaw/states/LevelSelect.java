@@ -1,5 +1,7 @@
 package com.mygdx.wanderingpaw.states;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.wanderingpaw.handlers.GameButton;
 import com.mygdx.wanderingpaw.handlers.GameStateManager;
@@ -8,7 +10,7 @@ import com.mygdx.wanderingpaw.main.Game;
 
 public class LevelSelect extends GameState {
 
-    private TextureRegion reg;
+  private TextureRegion reg;
 
     private GameButton[][] buttons;
 
@@ -18,40 +20,21 @@ public class LevelSelect extends GameState {
 
         reg = new TextureRegion(Game.res.getTexture("sky-image"), 0, 0, 1280, 720);
 
-        TextureRegion buttonReg = new TextureRegion(Game.res.getTexture("hud"), 0, 0, 32, 32);
-        buttons = new GameButton[1][5];
-        for (int row = 0; row < buttons.length; row++) {
-            for (int col = 0; col < buttons[0].length; col++) {
-                buttons[row][col] = new GameButton(buttonReg, 80 + col * 40, 200 - row * 40, cam);
-                buttons[row][col].setText(row * buttons[0].length + col + 1 + "");
-            }
-        }
 
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
 
     }
 
     public void handleInput() {
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            gsm.setState(GameStateManager.MENU);
+        }
     }
 
     public void update(float dt) {
 
         handleInput();
 
-        for (int row = 0; row < buttons.length; row++) {
-            for (int col = 0; col < buttons[0].length; col++) {
-                buttons[row][col].update(dt);
-                if (buttons[row][col].isClicked()) {
-
-                    int clickedLevel = row * buttons[0].length + col + 1;
-                    if (clickedLevel <= 5) {
-                        Play.level = row * buttons[0].length + col + 1;
-                        //Game.res.getSound("levelselect").play();
-                        gsm.setState(GameStateManager.PLAY);
-                    }
-                }
-            }
-        }
 
     }
 
@@ -63,16 +46,11 @@ public class LevelSelect extends GameState {
         sb.draw(reg, 0, 0);
         sb.end();
 
-        for (GameButton[] button : buttons) {
-            for (int col = 0; col < buttons[0].length; col++) {
-                button[col].render(sb);
-            }
-        }
 
     }
 
+    @Override
     public void dispose() {
-        // everything is in the resource manager com.neet.blockbunny.handlers.Content
-    }
 
+    }
 }
