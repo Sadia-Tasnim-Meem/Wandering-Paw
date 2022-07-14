@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -14,6 +16,9 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
+import com.mygdx.wanderingpaw.entities.Butterfly;
+import com.mygdx.wanderingpaw.entities.Catnip;
 import com.mygdx.wanderingpaw.entities.HUD;
 import com.mygdx.wanderingpaw.entities.Player;
 import com.mygdx.wanderingpaw.handlers.*;
@@ -29,6 +34,8 @@ public class Play extends GameState {
 
     private BoundedCamera b2dCam;
     private Player player;
+    private Array<Catnip> catnips;
+    private Array<Butterfly> butterflies;
     private TiledMap tileMap;
     private int tileMapWidth;
     private int tileMapHeight;
@@ -58,6 +65,10 @@ public class Play extends GameState {
 
         createTiles();
         ((BoundedCamera) cam).setBounds(0, tileMapWidth * tileSize, 0, tileMapHeight * tileSize);
+
+        // create catnip
+        createCatnip();
+        createButterfly();
 
         //create backgrounds
         TextureRegion sky = new TextureRegion(Game.res.getTexture("sky-image"), 0, 0, 1280, 720);
@@ -91,7 +102,7 @@ public class Play extends GameState {
 
         //tileMap = new TmxMapLoader().load("res/images/Test1.tmx");
         if(level == 1){
-            tileMap = new TmxMapLoader().load("res/images/test1_for1280x720.tmx");
+            tileMap = new TmxMapLoader().load("res/images/8x300 tile.tmx");
             tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
             tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
             tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
@@ -241,6 +252,66 @@ public class Play extends GameState {
 
     }
 
+    private void createCatnip(){
+        catnips = new Array <Catnip> ();
+        MapLayer layer = tileMap.getLayers().get("catnips");
+        if (layer == null) return;
+
+        for (MapObject mapObject : layer.getObjects()) {
+            BodyDef bdef = new BodyDef();
+            FixtureDef fdef = new FixtureDef();
+            bdef.type = BodyDef.BodyType.StaticBody;
+            float x = Float.parseFloat(mapObject.getProperties().get("x").toString()) / PPM;
+            float y = Float.parseFloat(mapObject.getProperties().get("y").toString()) / PPM;
+            bdef.position.set(x, y);
+            Body body = world.createBody(bdef);
+
+            CircleShape cshape = new CircleShape();
+            cshape.setRadius(16 / PPM);
+            fdef.shape = cshape;
+            fdef.isSensor = true;
+            fdef.filter.categoryBits = B2DVars.BIT_CATNIP;
+            fdef.filter.maskBits = B2DVars.BIT_PLAYER;
+            body.createFixture(fdef).setUserData("catnip");
+
+            Catnip c = new Catnip(body);
+            body.setUserData(c);
+            catnips.add(c);
+            cshape.dispose();
+        }
+
+    }
+
+    private void createButterfly(){
+        butterflies = new Array <Butterfly> ();
+        MapLayer layer = tileMap.getLayers().get("butterflies");
+        if (layer == null) return;
+
+        for (MapObject mapObject : layer.getObjects()) {
+            BodyDef bdef = new BodyDef();
+            FixtureDef fdef = new FixtureDef();
+            bdef.type = BodyDef.BodyType.StaticBody;
+            float x = Float.parseFloat(mapObject.getProperties().get("x").toString()) / PPM;
+            float y = Float.parseFloat(mapObject.getProperties().get("y").toString()) / PPM;
+            bdef.position.set(x, y);
+            Body body = world.createBody(bdef);
+
+            CircleShape cshape = new CircleShape();
+            cshape.setRadius(48 / PPM);
+            fdef.shape = cshape;
+            fdef.isSensor = true;
+            fdef.filter.categoryBits = B2DVars.BIT_BUTTERFLY;
+            fdef.filter.maskBits = B2DVars.BIT_PLAYER;
+            body.createFixture(fdef).setUserData("butterfly");
+
+            Butterfly b = new Butterfly(body);
+            body.setUserData(b);
+            butterflies.add(b);
+            cshape.dispose();
+        }
+
+    }
+
     private void renderBackground(){
 
     }
@@ -277,6 +348,17 @@ public class Play extends GameState {
         //update player
         this.player.update(dt);
 
+        // update catnips
+        for(int i = 0; i <  catnips.size; i++){
+            catnips.get(i).update(dt);
+        }
+
+        //update butterflies
+        for(int j = 0; j <  butterflies.size; j++){
+            catnips.get(j).update(dt);
+        }
+
+
         // check player win
         if (player.getBody().getPosition().x * B2DVars.PPM > tileMapWidth * tileSize) {
 
@@ -310,6 +392,17 @@ public class Play extends GameState {
         // draw player
         sb.setProjectionMatrix(cam.combined);
         player.render(sb);
+
+        //draw catnip
+        for(int i = 0; i <  catnips.size; i++){
+            catnips.get(i).render(sb);
+        }
+
+        //draw butterflies
+        for(int j = 0; j <  butterflies.size; j++){
+            butterflies.get(j).render(sb);
+        }
+
         // draw hud
         sb.setProjectionMatrix(hudCam.combined);
         hud.render(sb);
@@ -327,6 +420,8 @@ public class Play extends GameState {
     public void dispose() {
 
     }
+
+
 
 
 }
