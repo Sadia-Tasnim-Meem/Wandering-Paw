@@ -101,8 +101,32 @@ public class Play extends GameState {
         //TileMap
 
         //tileMap = new TmxMapLoader().load("res/images/Test1.tmx");
-        if(level == 1){
-            tileMap = new TmxMapLoader().load("res/images/8x300 tile.tmx");
+        if (level == 1) {
+            tileMap = new TmxMapLoader().load("res/images/This is level 1.tmx"); // grass
+            tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
+            tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
+            tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
+            tiledMapRenderer = new OrthogonalTiledMapRenderer(tileMap);
+            layer = (TiledMapTileLayer) tileMap.getLayers().get("Tile Layer 1");
+            createLayers(layer, B2DVars.BIT_GROUND);
+        } else if (level == 2) {
+            tileMap = new TmxMapLoader().load("res/images/This is level 2.tmx"); // sand
+            tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
+            tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
+            tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
+            tiledMapRenderer = new OrthogonalTiledMapRenderer(tileMap);
+            layer = (TiledMapTileLayer) tileMap.getLayers().get("Tile Layer 1");
+            createLayers(layer, B2DVars.BIT_GROUND);
+        } else if (level == 3) {
+            tileMap = new TmxMapLoader().load("res/images/This is level 3.tmx"); //ice
+            tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
+            tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
+            tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
+            tiledMapRenderer = new OrthogonalTiledMapRenderer(tileMap);
+            layer = (TiledMapTileLayer) tileMap.getLayers().get("Tile Layer 1");
+            createLayers(layer, B2DVars.BIT_GROUND);
+        } else if (level == 4) {
+            tileMap = new TmxMapLoader().load("res/images/This is level 4.tmx"); // mountain
             tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
             tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
             tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
@@ -110,35 +134,6 @@ public class Play extends GameState {
             layer = (TiledMapTileLayer) tileMap.getLayers().get("Tile Layer 1");
             createLayers(layer, B2DVars.BIT_GROUND);
         }
-        else if(level == 2){
-            tileMap = new TmxMapLoader().load("res/images/Test1.tmx");
-            tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
-            tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
-            tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
-            tiledMapRenderer = new OrthogonalTiledMapRenderer(tileMap);
-            layer = (TiledMapTileLayer) tileMap.getLayers().get("Tile Layer 1");
-            createLayers(layer, B2DVars.BIT_GROUND);
-        }
-        else if(level == 3){
-            tileMap = new TmxMapLoader().load("res/images/test 2.tmx");
-            tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
-            tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
-            tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
-            tiledMapRenderer = new OrthogonalTiledMapRenderer(tileMap);
-            layer = (TiledMapTileLayer) tileMap.getLayers().get("Tile Layer 1");
-            createLayers(layer, B2DVars.BIT_GROUND);
-        }
-        else if(level == 4){
-            tileMap = new TmxMapLoader().load("res/images/test.tmx");
-            tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
-            tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
-            tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
-            tiledMapRenderer = new OrthogonalTiledMapRenderer(tileMap);
-            layer = (TiledMapTileLayer) tileMap.getLayers().get("Tile Layer 1");
-            createLayers(layer, B2DVars.BIT_GROUND);
-        }
-
-
 
 
     }
@@ -203,7 +198,7 @@ public class Play extends GameState {
         // create bodydef
         BodyDef bdef = new BodyDef();
         bdef.type = BodyDef.BodyType.DynamicBody;
-        bdef.position.set(60*3 / PPM, 120*3 / PPM);
+        bdef.position.set(60 * 3 / PPM, 120 * 3 / PPM);
         bdef.fixedRotation = true;
         //bdef.linearVelocity.set(1, 0);
 
@@ -213,7 +208,7 @@ public class Play extends GameState {
 
         // create box shape for player collision box
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(13*3 / PPM, 13*3 / PPM);
+        shape.setAsBox(13 * 3 / PPM, 13 * 3 / PPM);
 
         // create fixturedef for player collision box
         FixtureDef fdef = new FixtureDef();
@@ -229,7 +224,7 @@ public class Play extends GameState {
 
         // create box shape for player foot
         shape = new PolygonShape();
-        shape.setAsBox(13*3 / PPM, 2*3 / PPM, new Vector2(0, -13*3 / PPM), 0);
+        shape.setAsBox(13 * 3 / PPM, 2 * 3 / PPM, new Vector2(0, -13 * 3 / PPM), 0);
 
         // create fixturedef for player foot
         fdef.shape = shape;
@@ -252,8 +247,8 @@ public class Play extends GameState {
 
     }
 
-    private void createCatnip(){
-        catnips = new Array <Catnip> ();
+    private void createCatnip() {
+        catnips = new Array<Catnip>();
         MapLayer layer = tileMap.getLayers().get("catnips");
         if (layer == null) return;
 
@@ -282,8 +277,8 @@ public class Play extends GameState {
 
     }
 
-    private void createButterfly(){
-        butterflies = new Array <Butterfly> ();
+    private void createButterfly() {
+        butterflies = new Array<Butterfly>();
         MapLayer layer = tileMap.getLayers().get("butterflies");
         if (layer == null) return;
 
@@ -312,26 +307,26 @@ public class Play extends GameState {
 
     }
 
-    private void renderBackground(){
+    private void renderBackground() {
 
     }
 
 
     public void handleInput() {
 
-        if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            player.getBody().setLinearVelocity(2,0);
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            player.getBody().setLinearVelocity(2, 0);
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            player.getBody().setLinearVelocity(-2,0);
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            player.getBody().setLinearVelocity(-2, 0);
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.W) && JumpCounter<2){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W) && JumpCounter < 2) {
             float force = player.getBody().getMass() * 8;
             player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
             player.getBody().applyLinearImpulse(new Vector2(0, force), player.getBody().getPosition(), true);
             JumpCounter++;
         }
-        if(player.getBody().getLinearVelocity().y == 0) {
+        if (player.getBody().getLinearVelocity().y == 0) {
             JumpCounter = 0;
         }
     }
@@ -340,21 +335,38 @@ public class Play extends GameState {
         //check input
         handleInput();
 
-        //world.step(dt, 6, 2);
 
         // update box2d world
         world.step(Game.STEP, 1, 1);
+
+        //remove catnip and butterfly
+        Array<Body> bodies = contactListener.getBodiesToRemove();
+        Array<Body> bodies2 = contactListener.getBodiesToRemove2();
+
+
+        for (int i = 0; i < bodies.size; i++) {
+            Body b = bodies.get(i);
+            catnips.removeValue((Catnip) b.getUserData(), true);
+            world.destroyBody(bodies.get(i));
+        }
+        bodies.clear();
+        for (int i = 0; i < bodies2.size; i++) {
+            Body b = bodies2.get(i);
+            butterflies.removeValue((Butterfly) b.getUserData(), true);
+            world.destroyBody(bodies2.get(i));
+        }
+        bodies2.clear();
 
         //update player
         this.player.update(dt);
 
         // update catnips
-        for(int i = 0; i <  catnips.size; i++){
+        for (int i = 0; i < catnips.size; i++) {
             catnips.get(i).update(dt);
         }
 
-        //update butterflies
-        for(int j = 0; j <  butterflies.size; j++){
+        //update butterflieswd
+        for (int j = 0; j < butterflies.size; j++) {
             catnips.get(j).update(dt);
         }
 
@@ -364,7 +376,7 @@ public class Play extends GameState {
 
             //levelunlocked[level] = true;
             Save.gd.setlevelUnlocked(level);
-            if(level == 3){
+            if (level == 3) {
                 Save.gd.init();
                 Save.save();
             }
@@ -394,12 +406,12 @@ public class Play extends GameState {
         player.render(sb);
 
         //draw catnip
-        for(int i = 0; i <  catnips.size; i++){
+        for (int i = 0; i < catnips.size; i++) {
             catnips.get(i).render(sb);
         }
 
         //draw butterflies
-        for(int j = 0; j <  butterflies.size; j++){
+        for (int j = 0; j < butterflies.size; j++) {
             butterflies.get(j).render(sb);
         }
 
@@ -420,8 +432,6 @@ public class Play extends GameState {
     public void dispose() {
 
     }
-
-
 
 
 }
