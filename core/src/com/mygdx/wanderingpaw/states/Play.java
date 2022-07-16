@@ -33,6 +33,7 @@ public class Play extends GameState {
     private CustomizedContactListener contactListener;
 
     private BoundedCamera b2dCam;
+    // private static Player player;
     private Player player;
     private Array<Catnip> catnips;
     private Array<Butterfly> butterflies;
@@ -432,6 +433,10 @@ public class Play extends GameState {
     public void dispose() {
 
     }
+
+//    public static Player getPlayer(){
+//        return player;
+//    }
 
 
 }
