@@ -33,8 +33,8 @@ public class Play extends GameState {
     private CustomizedContactListener contactListener;
 
     private BoundedCamera b2dCam;
-    // private static Player player;
-    private Player player;
+     private static Player player;
+//    private Player player;
     private Array<Catnip> catnips;
     private Array<Butterfly> butterflies;
     private TiledMap tileMap;
@@ -434,9 +434,9 @@ public class Play extends GameState {
 
     }
 
-//    public static Player getPlayer(){
-//        return player;
-//    }
+    public static Player getPlayer(){
+        return player;
+    }
 
 
 }
