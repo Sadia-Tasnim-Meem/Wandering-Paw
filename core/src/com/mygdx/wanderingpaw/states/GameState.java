@@ -1,5 +1,6 @@
 package com.mygdx.wanderingpaw.states;
 
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.wanderingpaw.handlers.GameStateManager;

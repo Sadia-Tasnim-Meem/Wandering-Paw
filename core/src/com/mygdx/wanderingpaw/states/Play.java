@@ -3,9 +3,6 @@ package com.mygdx.wanderingpaw.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -13,7 +10,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
@@ -48,8 +44,13 @@ public class Play extends GameState {
     private int JumpCounter = 0;
 
     public static int level;
-
+    public static boolean left = false;
+    public static boolean right = true;
     public static boolean[] levelunlocked = new boolean[4];
+
+    private boolean pause;
+
+    private Vector2 last_veclocity;
 
     public Play(GameStateManager gsm) {
 
@@ -314,14 +315,54 @@ public class Play extends GameState {
 
 
     public void handleInput() {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && !pause){
+            pause = true;
+            last_veclocity = player.getBody().getLinearVelocity();
+            player.getBody().setLinearVelocity(0,0);
+            System.out.println(last_veclocity);
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && pause){
+            pause = false;
+            System.out.println(last_veclocity);
+            player.getBody().setLinearVelocity(last_veclocity);
+        }
 
+        if(!pause){
+
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                player.getBody().setLinearVelocity(2, 0);
+                if(left) left = false;
+                right = true;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                player.getBody().setLinearVelocity(-2, 0);
+                if(right) right = false;
+                left = true;
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.W) && JumpCounter < 2) {
+
+                float force = player.getBody().getMass() * 8;
+                player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
+                player.getBody().applyLinearImpulse(new Vector2(0, force), player.getBody().getPosition(), true);
+                JumpCounter++;
+            }
+            if (player.getBody().getLinearVelocity().y == 0) {
+                JumpCounter = 0;
+            }
+        }
+/*
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             player.getBody().setLinearVelocity(2, 0);
+            if(left) left = false;
+            right = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             player.getBody().setLinearVelocity(-2, 0);
+            if(right) right = false;
+            left = true;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.W) && JumpCounter < 2) {
+
             float force = player.getBody().getMass() * 8;
             player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
             player.getBody().applyLinearImpulse(new Vector2(0, force), player.getBody().getPosition(), true);
@@ -329,11 +370,21 @@ public class Play extends GameState {
         }
         if (player.getBody().getLinearVelocity().y == 0) {
             JumpCounter = 0;
-        }
+        }*/
     }
 
     public void update(float dt) {
         //check input
+
+    /*    //pause
+        if(pause){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+                pause = false;
+            }
+        }
+        else{
+            handleInput();
+        }*/
         handleInput();
 
 
@@ -358,8 +409,12 @@ public class Play extends GameState {
         }
         bodies2.clear();
 
+
         //update player
-        this.player.update(dt);
+        if(!pause){
+            player.update(dt);
+        }
+        //this.player.update(dt);
 
         // update catnips
         for (int i = 0; i < catnips.size; i++) {
@@ -394,14 +449,66 @@ public class Play extends GameState {
         ((BoundedCamera) cam).setPosition(player.getPosition().x * PPM + Game.V_WIDTH / 4, Game.V_HEIGHT / 2);
         cam.update();
 
+        //pause
+        /*if(pause){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+                pause = true;
+            }
+        }
+        else{
+            //pause true
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+                pause = true;
+            }
+
+            // draw bgs
+            sb.setProjectionMatrix(hudCam.combined);
+            for (Background background : backgrounds) {
+                background.render(sb);
+            }
+
+            // draw tilemap
+            tiledMapRenderer.setView(cam);
+            tiledMapRenderer.render();
+
+            // draw player
+            sb.setProjectionMatrix(cam.combined);
+            player.render(sb);
+
+            //draw catnip
+            for (int i = 0; i < catnips.size; i++) {
+                catnips.get(i).render(sb);
+            }
+
+            //draw butterflies
+            for (int j = 0; j < butterflies.size; j++) {
+                butterflies.get(j).render(sb);
+            }
+
+            // draw hud
+            sb.setProjectionMatrix(hudCam.combined);
+            hud.render(sb);
+
+
+            // debug draw box2d
+            if (debug) {
+                b2dCam.setPosition(player.getPosition().x + Game.V_WIDTH / 4 / PPM, Game.V_HEIGHT / 2 / PPM);
+                b2dCam.update();
+                b2dr.render(world, b2dCam.combined);
+            }
+        }
+*/
+
         // draw bgs
         sb.setProjectionMatrix(hudCam.combined);
         for (Background background : backgrounds) {
             background.render(sb);
         }
+
         // draw tilemap
         tiledMapRenderer.setView(cam);
         tiledMapRenderer.render();
+
         // draw player
         sb.setProjectionMatrix(cam.combined);
         player.render(sb);
@@ -427,6 +534,8 @@ public class Play extends GameState {
             b2dCam.update();
             b2dr.render(world, b2dCam.combined);
         }
+
+
 
     }
 
