@@ -63,4 +63,8 @@ public class B2DSprite {
         return height;
     }
 
+    public Vector2 getLinearVelocity() {
+        return body.getLinearVelocity();
+    }
+
 }

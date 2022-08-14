@@ -13,10 +13,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.wanderingpaw.entities.Butterfly;
-import com.mygdx.wanderingpaw.entities.Catnip;
-import com.mygdx.wanderingpaw.entities.HUD;
-import com.mygdx.wanderingpaw.entities.Player;
+import com.mygdx.wanderingpaw.entities.*;
 import com.mygdx.wanderingpaw.handlers.*;
 import com.mygdx.wanderingpaw.main.Game;
 
@@ -29,10 +26,11 @@ public class Play extends GameState {
     private CustomizedContactListener contactListener;
 
     private BoundedCamera b2dCam;
-     private static Player player;
-//    private Player player;
+    private static Player player;
+    //    private Player player;
     private Array<Catnip> catnips;
     private Array<Butterfly> butterflies;
+    private Array<Spike> spikes;
     private TiledMap tileMap;
     private int tileMapWidth;
     private int tileMapHeight;
@@ -68,9 +66,10 @@ public class Play extends GameState {
         createTiles();
         ((BoundedCamera) cam).setBounds(0, tileMapWidth * tileSize, 0, tileMapHeight * tileSize);
 
-        // create catnip
+        // create catnip, butterflies and spikes
         createCatnip();
         createButterfly();
+        createSpikes();
 
         //create backgrounds
         TextureRegion sky = new TextureRegion(Game.res.getTexture("sky-image"), 0, 0, 1280, 720);
@@ -104,7 +103,7 @@ public class Play extends GameState {
 
         //tileMap = new TmxMapLoader().load("res/images/Test1.tmx");
         if (level == 1) {
-            tileMap = new TmxMapLoader().load("res/images/This is level 1.tmx"); // grass
+            tileMap = new TmxMapLoader().load("res/images/This is level 2 new.tmx"); // grass
             tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
             tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
             tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
@@ -309,34 +308,66 @@ public class Play extends GameState {
 
     }
 
+    private void createSpikes() {
+
+        spikes = new Array<Spike>();
+
+        MapLayer layer = tileMap.getLayers().get("spikes");
+        if (layer == null) return;
+
+        for (MapObject mapObject : layer.getObjects()) {
+            BodyDef bdef = new BodyDef();
+            FixtureDef fdef = new FixtureDef();
+            bdef.type = BodyDef.BodyType.StaticBody;
+            float x = Float.parseFloat(mapObject.getProperties().get("x").toString()) / PPM;
+            float y = Float.parseFloat(mapObject.getProperties().get("y").toString()) / PPM;
+            bdef.position.set(x, y);
+            Body body = world.createBody(bdef);
+
+            CircleShape cshape = new CircleShape();
+            cshape.setRadius(48 / PPM);
+            fdef.shape = cshape;
+            fdef.isSensor = true;
+            fdef.filter.categoryBits = B2DVars.BIT_SPIKE;
+            fdef.filter.maskBits = B2DVars.BIT_PLAYER;
+            body.createFixture(fdef).setUserData("spike");
+
+            Spike s = new Spike(body);
+            body.setUserData(s);
+            spikes.add(s);
+            cshape.dispose();
+        }
+
+    }
+
     private void renderBackground() {
 
     }
 
 
     public void handleInput() {
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && !pause){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && !pause) {
             pause = true;
             last_veclocity = player.getBody().getLinearVelocity();
-            player.getBody().setLinearVelocity(0,0);
+            player.getBody().setLinearVelocity(0, 0);
             System.out.println(last_veclocity);
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && pause){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && pause) {
             pause = false;
             System.out.println(last_veclocity);
             player.getBody().setLinearVelocity(last_veclocity);
         }
 
-        if(!pause){
+        if (!pause) {
 
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
                 player.getBody().setLinearVelocity(2, 0);
-                if(left) left = false;
+                if (left) left = false;
                 right = true;
             }
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 player.getBody().setLinearVelocity(-2, 0);
-                if(right) right = false;
+                if (right) right = false;
                 left = true;
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.W) && JumpCounter < 2) {
@@ -411,7 +442,7 @@ public class Play extends GameState {
 
 
         //update player
-        if(!pause){
+        if (!pause) {
             player.update(dt);
         }
         //this.player.update(dt);
@@ -421,9 +452,13 @@ public class Play extends GameState {
             catnips.get(i).update(dt);
         }
 
-        //update butterflieswd
+        //update butterflies
         for (int j = 0; j < butterflies.size; j++) {
             catnips.get(j).update(dt);
+        }
+        //update spikes
+        for (int i = 0; i < spikes.size; i++) {
+            spikes.get(i).update(dt);
         }
 
 
@@ -522,6 +557,10 @@ public class Play extends GameState {
         for (int j = 0; j < butterflies.size; j++) {
             butterflies.get(j).render(sb);
         }
+        //draw spikes
+        for (int i = 0; i < spikes.size; i++) {
+            spikes.get(i).render(sb);
+        }
 
         // draw hud
         sb.setProjectionMatrix(hudCam.combined);
@@ -536,14 +575,13 @@ public class Play extends GameState {
         }
 
 
-
     }
 
     public void dispose() {
 
     }
 
-    public static Player getPlayer(){
+    public static Player getPlayer() {
         return player;
     }
 

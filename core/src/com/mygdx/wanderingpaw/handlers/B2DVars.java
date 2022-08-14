@@ -12,6 +12,7 @@ public class B2DVars {
     public static final short BIT_CATNIP = 8;
 
     public static final short BIT_BUTTERFLY = 16;
+    public static final short BIT_SPIKE = 32;
 
 
 

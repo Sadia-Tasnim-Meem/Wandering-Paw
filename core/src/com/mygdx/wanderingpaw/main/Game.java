@@ -31,8 +31,8 @@ public class Game implements ApplicationListener {
         Gdx.input.setInputProcessor(new CustomizedInputProcessor());
 
         res = new Content();
-        //res.loadTexture("res/images/sprite all.png","cat");
-        res.loadTexture("res/images/sprite.png","cat");
+        res.loadTexture("res/images/sprite all.png","cat");
+        //res.loadTexture("res/images/sprite.png","cat");
         res.loadTexture("res/images/sprite backward.png","catrev");
         res.loadTexture("res/images/sky_s1280x720.jpg","sky-image");
         res.loadTexture("res/images/fence.png","fence-image");
@@ -40,6 +40,8 @@ public class Game implements ApplicationListener {
         res.loadTexture("res/images/MenuButtons.png","Menu Buttons");
         res.loadTexture("res/images/catnip 1 transparent 32x32.png","catnip");
         res.loadTexture("res/images/butterfly 96x96.png","butterfly");
+        res.loadTexture("res/images/spike.png","spike");
+
 
 
 
