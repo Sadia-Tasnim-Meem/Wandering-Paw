@@ -116,7 +116,7 @@ public class Play extends GameState {
 
         //tileMap = new TmxMapLoader().load("res/images/Test1.tmx");
         if (level == 1) {
-            tileMap = new TmxMapLoader().load("res/images/This is level 2 new.tmx"); // grass
+            tileMap = new TmxMapLoader().load("res/images/This is level 1 new.tmx"); // grass
             tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
             tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
             tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
@@ -124,7 +124,7 @@ public class Play extends GameState {
             layer = (TiledMapTileLayer) tileMap.getLayers().get("Tile Layer 1");
             createLayers(layer, B2DVars.BIT_GROUND);
         } else if (level == 2) {
-            tileMap = new TmxMapLoader().load("res/images/This is level 2.tmx"); // sand
+            tileMap = new TmxMapLoader().load("res/images/This is level 2 new.tmx"); // sand
             tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
             tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
             tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
@@ -132,7 +132,7 @@ public class Play extends GameState {
             layer = (TiledMapTileLayer) tileMap.getLayers().get("Tile Layer 1");
             createLayers(layer, B2DVars.BIT_GROUND);
         } else if (level == 3) {
-            tileMap = new TmxMapLoader().load("res/images/This is level 3.tmx"); //ice
+            tileMap = new TmxMapLoader().load("res/images/This is level 3 new.tmx"); //ice
             tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
             tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
             tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());

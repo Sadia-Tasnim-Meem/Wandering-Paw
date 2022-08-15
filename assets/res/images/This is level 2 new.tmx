@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="300" height="8" tilewidth="96" tileheight="96" infinite="0" nextlayerid="16" nextobjectid="212">
+<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="300" height="8" tilewidth="96" tileheight="96" infinite="0" nextlayerid="16" nextobjectid="226">
  <tileset firstgid="1" source="sand.tsx"/>
  <layer id="1" name="Tile Layer 1" width="300" height="8">
   <data encoding="csv">
@@ -35,9 +35,6 @@
   <object id="201" x="13004" y="658">
    <point/>
   </object>
-  <object id="202" x="14731" y="663">
-   <point/>
-  </object>
   <object id="203" x="16555" y="665">
    <point/>
   </object>
@@ -63,6 +60,36 @@
    <point/>
   </object>
   <object id="211" x="27408" y="661.333">
+   <point/>
+  </object>
+  <object id="212" x="7168" y="665.333">
+   <point/>
+  </object>
+  <object id="214" x="8012" y="476">
+   <point/>
+  </object>
+  <object id="216" x="8973.33" y="672">
+   <point/>
+  </object>
+  <object id="218" x="13390.7" y="478.667">
+   <point/>
+  </object>
+  <object id="220" x="14832" y="477.333">
+   <point/>
+  </object>
+  <object id="221" x="14170.7" y="670.667">
+   <point/>
+  </object>
+  <object id="222" x="15792" y="668">
+   <point/>
+  </object>
+  <object id="223" x="18000" y="478.667">
+   <point/>
+  </object>
+  <object id="224" x="19153.3" y="478.667">
+   <point/>
+  </object>
+  <object id="225" x="19729.3" y="476">
    <point/>
   </object>
  </objectgroup>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="300" height="8" tilewidth="96" tileheight="96" infinite="0" nextlayerid="11" nextobjectid="159">
+<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="300" height="8" tilewidth="96" tileheight="96" infinite="0" nextlayerid="12" nextobjectid="187">
  <tileset firstgid="1" source="ice.tsx"/>
  <objectgroup id="9" name="catnips">
   <object id="121" x="393.939" y="300" width="96.9697" height="84.8485">
@@ -64,6 +64,83 @@
   </object>
   <object id="141" x="28330.3" y="521.212" width="90.9091" height="72.7273">
    <ellipse/>
+  </object>
+ </objectgroup>
+ <objectgroup id="11" name="spikes">
+  <object id="159" x="621.333" y="666.667">
+   <point/>
+  </object>
+  <object id="161" x="2636" y="672">
+   <point/>
+  </object>
+  <object id="162" x="4558.67" y="666.667">
+   <point/>
+  </object>
+  <object id="163" x="5804" y="669.333">
+   <point/>
+  </object>
+  <object id="164" x="7828" y="669.333">
+   <point/>
+  </object>
+  <object id="165" x="8692" y="669.333">
+   <point/>
+  </object>
+  <object id="166" x="10420" y="668">
+   <point/>
+  </object>
+  <object id="167" x="9928" y="668">
+   <point/>
+  </object>
+  <object id="168" x="12141.3" y="477.333">
+   <point/>
+  </object>
+  <object id="169" x="12718.7" y="669.333">
+   <point/>
+  </object>
+  <object id="170" x="13966.7" y="669.333">
+   <point/>
+  </object>
+  <object id="171" x="15890.7" y="670.667">
+   <point/>
+  </object>
+  <object id="172" x="16946.7" y="285.333">
+   <point/>
+  </object>
+  <object id="173" x="17522.7" y="672">
+   <point/>
+  </object>
+  <object id="174" x="18770.7" y="480">
+   <point/>
+  </object>
+  <object id="175" x="20013.3" y="670.667">
+   <point/>
+  </object>
+  <object id="176" x="21572" y="669.333">
+   <point/>
+  </object>
+  <object id="177" x="21261.3" y="380">
+   <point/>
+  </object>
+  <object id="179" x="22038.7" y="668">
+   <point/>
+  </object>
+  <object id="180" x="23572" y="669.333">
+   <point/>
+  </object>
+  <object id="181" x="24624" y="380">
+   <point/>
+  </object>
+  <object id="182" x="25873.3" y="382.667">
+   <point/>
+  </object>
+  <object id="183" x="26832" y="670.667">
+   <point/>
+  </object>
+  <object id="184" x="27892" y="668">
+   <point/>
+  </object>
+  <object id="186" x="3695.33" y="384">
+   <point/>
   </object>
  </objectgroup>
  <objectgroup id="10" name="butterflies">

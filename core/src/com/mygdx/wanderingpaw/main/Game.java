@@ -31,8 +31,8 @@ public class Game implements ApplicationListener {
         Gdx.input.setInputProcessor(new CustomizedInputProcessor());
 
         res = new Content();
-        res.loadTexture("res/images/sprite all.png","cat");
-        //res.loadTexture("res/images/sprite.png","cat");
+        //res.loadTexture("res/images/sprite all.png","cat");
+        res.loadTexture("res/images/sprite.png","cat");
         res.loadTexture("res/images/sprite backward.png","catrev");
         res.loadTexture("res/images/sky_s1280x720.jpg","sky-image");
         res.loadTexture("res/images/fence.png","fence-image");
