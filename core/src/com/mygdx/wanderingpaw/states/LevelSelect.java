@@ -16,9 +16,11 @@ public class LevelSelect extends GameState {
 
     private GameButton[][] buttons;
 
-    private GameButton newGame;
-    private GameButton resume;
-    private GameButton exit;
+    private GameButton Level1;
+    private GameButton Level2;
+    private GameButton Level3;
+    private GameButton Level4;
+    private GameButton escape;
 
     private int levelSelected;
 
@@ -28,11 +30,14 @@ public class LevelSelect extends GameState {
 
         reg = new TextureRegion(Game.res.getTexture("sky-image"), 0, 0, 1280, 720);
 
-        Texture tex = Game.res.getTexture("Menu Buttons");
-        newGame = new GameButton(new TextureRegion(tex, 0, 0, 233, 96), (Game.V_WIDTH/10)*8, (Game.V_HEIGHT/7)*3, cam);
-        resume = new GameButton(new  TextureRegion(tex, 0, 96, 233, 96),(Game.V_WIDTH/10)*8, (Game.V_HEIGHT/7)*2,cam);
-        exit = new GameButton(new  TextureRegion(tex, 0, 96*2, 233, 96),(Game.V_WIDTH/10)*8, (Game.V_HEIGHT/7),cam);
+        Texture tex = Game.res.getTexture("Buttons");
+        Level1 = new GameButton(new TextureRegion(tex, 233, 0, 233, 96), (Game.V_WIDTH/2), (Game.V_HEIGHT/10)*8, cam);
+        Level2 = new GameButton(new  TextureRegion(tex, 233, 96, 233, 96),(Game.V_WIDTH/2), (Game.V_HEIGHT/10)*6,cam);
+        Level3 = new GameButton(new  TextureRegion(tex, 233, 96*2, 233, 96),(Game.V_WIDTH/2), (Game.V_HEIGHT/10)*4,cam);
+        Level4 = new GameButton(new  TextureRegion(tex, 233, 96*3, 233, 96),(Game.V_WIDTH/2), (Game.V_HEIGHT/10)*2,cam);
 
+        Texture escape_tex = Game.res.getTexture("escape_button");
+        escape = new GameButton(new TextureRegion(escape_tex, 0,0,40,40), (Game.V_WIDTH/30)*1, (Game.V_HEIGHT/20)*19, cam);
 
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
 
@@ -46,20 +51,20 @@ public class LevelSelect extends GameState {
     }
 
     public void handleInput() {
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || escape.isClicked()) {
             gsm.setState(GameStateManager.MENU);
         }
-        if(newGame.isClicked()){
+        if(Level1.isClicked()){
             Play.level = 1;
             gsm.setState(GameStateManager.PLAY);
         }
-        if(resume.isClicked()){
+        if(Level2.isClicked()){
             if(Play.levelunlocked[1]){
                 Play.level = 2;
                 gsm.setState(GameStateManager.PLAY);
             }
         }
-        if(exit.isClicked()){
+        if(Level3.isClicked()){
             if(Play.levelunlocked[2]){
                 Play.level = 3;
                 gsm.setState(GameStateManager.PLAY);
@@ -70,10 +75,11 @@ public class LevelSelect extends GameState {
     public void update(float dt) {
 
         handleInput();
-        newGame.update(dt);
-        resume.update(dt);
-        exit.update(dt);
-
+        Level1.update(dt);
+        Level2.update(dt);
+        Level3.update(dt);
+        Level4.update(dt);
+        escape.update(dt);
     }
 
     public void render() {
@@ -84,10 +90,11 @@ public class LevelSelect extends GameState {
         sb.draw(reg, 0, 0);
         sb.end();
 
-        newGame.render(sb);
-        resume.render(sb);
-        exit.render(sb);
-
+        Level1.render(sb);
+        Level2.render(sb);
+        Level3.render(sb);
+        Level4.render(sb);
+        escape.render(sb);
     }
 
     @Override

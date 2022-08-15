@@ -41,7 +41,7 @@ public class Menu extends GameState {
         bg = new Background(new TextureRegion(tex), cam, 1f);
         bg.setVector(-20, 0);
 
-        tex = Game.res.getTexture("Menu Buttons");
+        tex = Game.res.getTexture("Buttons");
         newGame = new GameButton(new TextureRegion(tex, 0, 0, 233, 96), (Game.V_WIDTH/10)*8, (Game.V_HEIGHT/7)*3, cam);
         resume = new GameButton(new  TextureRegion(tex, 0, 96, 233, 96),(Game.V_WIDTH/10)*8, (Game.V_HEIGHT/7)*2,cam);
         exit = new GameButton(new  TextureRegion(tex, 0, 96*2, 233, 96),(Game.V_WIDTH/10)*8, (Game.V_HEIGHT/7),cam);
