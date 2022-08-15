@@ -3,6 +3,7 @@ package com.mygdx.wanderingpaw.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -50,9 +51,21 @@ public class Play extends GameState {
 
     private Vector2 last_veclocity;
 
+    private GameButton escape;
+    private GameButton resume;
+    private GameButton restart;
+    private GameButton quit;
     public Play(GameStateManager gsm) {
 
         super(gsm);
+
+        //buttons
+        Texture escape_tex = Game.res.getTexture("escape_button");
+        escape = new GameButton(new TextureRegion(escape_tex, 0,0,40,40), (Game.V_WIDTH/30)*1, (Game.V_HEIGHT/20)*19, cam);
+        Texture tex = Game.res.getTexture("Buttons");
+        resume = new GameButton(new TextureRegion(tex, 0, 96, 233, 96), (Game.V_WIDTH/2), (Game.V_HEIGHT/8)*6, hudCam);
+        restart = new GameButton(new  TextureRegion(tex, 0, 96*4, 233, 96),(Game.V_WIDTH/2), (Game.V_HEIGHT/8)*4,hudCam);
+        quit = new GameButton(new  TextureRegion(tex, 0, 96*3, 233, 96),(Game.V_WIDTH/2), (Game.V_HEIGHT/8)*2,hudCam);
 
         //set up box2d world and contact listener
         world = new World(new Vector2(0, -25f), true);
@@ -346,17 +359,26 @@ public class Play extends GameState {
 
 
     public void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && !pause) {
+        if ((Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || escape.isClicked()) && !pause) {
             pause = true;
             last_veclocity = player.getBody().getLinearVelocity();
             player.getBody().setLinearVelocity(0, 0);
             System.out.println(last_veclocity);
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && pause) {
+        else if ((Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || resume.isClicked()) && pause) {
             pause = false;
             System.out.println(last_veclocity);
             player.getBody().setLinearVelocity(last_veclocity);
         }
+        else if (restart.isClicked() && pause) {
+            pause = false;
+            gsm.setState(GameStateManager.PLAY);
+        }
+        else if (quit.isClicked() && pause) {
+            pause = false;
+            gsm.setState(GameStateManager.LEVEL_SELECT);
+        }
+
 
         if (!pause) {
 
@@ -417,7 +439,13 @@ public class Play extends GameState {
             handleInput();
         }*/
         handleInput();
-
+        //button update
+        escape.update(dt);
+        if(pause){
+            resume.update(dt);
+            restart.update(dt);
+            quit.update(dt);
+        }
 
         // update box2d world
         world.step(Game.STEP, 1, 1);
@@ -565,6 +593,14 @@ public class Play extends GameState {
         // draw hud
         sb.setProjectionMatrix(hudCam.combined);
         hud.render(sb);
+
+        //button
+        escape.render(sb);
+        if(pause){
+            resume.render(sb);
+            restart.render(sb);
+            quit.render(sb);
+        }
 
 
         // debug draw box2d
