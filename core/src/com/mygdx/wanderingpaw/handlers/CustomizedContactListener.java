@@ -2,12 +2,16 @@ package com.mygdx.wanderingpaw.handlers;
 
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.wanderingpaw.states.Play;
 
 public class CustomizedContactListener implements ContactListener {
 
     private int numFootContacts;
     private Array<Body> bodiesToRemove; // for catnips
     private Array<Body> bodiesToRemove2; // for butterflies
+
+    private boolean catnip_received;
+    private boolean butterfly_received;
 
     public CustomizedContactListener() {
         super();
@@ -39,25 +43,35 @@ public class CustomizedContactListener implements ContactListener {
         if (fa.getUserData() != null && fa.getUserData().equals("catnip")) {
             //remove catnip
             bodiesToRemove.add(fa.getBody());
+            catnip_received = true;
 
         }
 
         if (fb.getUserData() != null && fb.getUserData().equals("catnip")) {
             //remove catnip
             bodiesToRemove.add(fb.getBody());
+            catnip_received = true;
 
         }
 
         if (fa.getUserData() != null && fa.getUserData().equals("butterfly")) {
             //remove butterfly
             bodiesToRemove2.add(fa.getBody());
-
+            butterfly_received = true;
         }
 
         if (fb.getUserData() != null && fb.getUserData().equals("butterfly")) {
             //remove butterfly
             bodiesToRemove2.add(fb.getBody());
-
+            butterfly_received = true;
+        }
+        if(catnip_received){
+            catnip_received = false;
+            Play.score++;
+        }
+        if(butterfly_received){
+            butterfly_received = false;
+            Play.score++;
         }
 
     }

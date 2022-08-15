@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -55,9 +56,15 @@ public class Play extends GameState {
     private GameButton resume;
     private GameButton restart;
     private GameButton quit;
+    public static long score;
+    private BitmapFont font;
     public Play(GameStateManager gsm) {
 
         super(gsm);
+
+        //score initialization
+        score = 0;
+        font = new BitmapFont(Gdx.files.internal("res/images/Font.fnt"));
 
         //buttons
         Texture escape_tex = Game.res.getTexture("escape_button");
@@ -383,12 +390,12 @@ public class Play extends GameState {
         if (!pause) {
 
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                player.getBody().setLinearVelocity(2, 0);
+                player.getBody().setLinearVelocity(3, 0);
                 if (left) left = false;
                 right = true;
             }
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                player.getBody().setLinearVelocity(-2, 0);
+                player.getBody().setLinearVelocity(-3, 0);
                 if (right) right = false;
                 left = true;
             }
@@ -403,42 +410,12 @@ public class Play extends GameState {
                 JumpCounter = 0;
             }
         }
-/*
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            player.getBody().setLinearVelocity(2, 0);
-            if(left) left = false;
-            right = true;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            player.getBody().setLinearVelocity(-2, 0);
-            if(right) right = false;
-            left = true;
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W) && JumpCounter < 2) {
-
-            float force = player.getBody().getMass() * 8;
-            player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
-            player.getBody().applyLinearImpulse(new Vector2(0, force), player.getBody().getPosition(), true);
-            JumpCounter++;
-        }
-        if (player.getBody().getLinearVelocity().y == 0) {
-            JumpCounter = 0;
-        }*/
     }
 
     public void update(float dt) {
         //check input
-
-    /*    //pause
-        if(pause){
-            if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-                pause = false;
-            }
-        }
-        else{
-            handleInput();
-        }*/
         handleInput();
+
         //button update
         escape.update(dt);
         if(pause){
@@ -512,56 +489,6 @@ public class Play extends GameState {
         ((BoundedCamera) cam).setPosition(player.getPosition().x * PPM + Game.V_WIDTH / 4, Game.V_HEIGHT / 2);
         cam.update();
 
-        //pause
-        /*if(pause){
-            if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-                pause = true;
-            }
-        }
-        else{
-            //pause true
-            if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-                pause = true;
-            }
-
-            // draw bgs
-            sb.setProjectionMatrix(hudCam.combined);
-            for (Background background : backgrounds) {
-                background.render(sb);
-            }
-
-            // draw tilemap
-            tiledMapRenderer.setView(cam);
-            tiledMapRenderer.render();
-
-            // draw player
-            sb.setProjectionMatrix(cam.combined);
-            player.render(sb);
-
-            //draw catnip
-            for (int i = 0; i < catnips.size; i++) {
-                catnips.get(i).render(sb);
-            }
-
-            //draw butterflies
-            for (int j = 0; j < butterflies.size; j++) {
-                butterflies.get(j).render(sb);
-            }
-
-            // draw hud
-            sb.setProjectionMatrix(hudCam.combined);
-            hud.render(sb);
-
-
-            // debug draw box2d
-            if (debug) {
-                b2dCam.setPosition(player.getPosition().x + Game.V_WIDTH / 4 / PPM, Game.V_HEIGHT / 2 / PPM);
-                b2dCam.update();
-                b2dr.render(world, b2dCam.combined);
-            }
-        }
-*/
-
         // draw bgs
         sb.setProjectionMatrix(hudCam.combined);
         for (Background background : backgrounds) {
@@ -602,6 +529,11 @@ public class Play extends GameState {
             quit.render(sb);
         }
 
+        // draw score
+        sb.setColor(1, 1, 1, 1);
+        sb.begin();
+        font.draw(sb, Long.toString(score), 1200, 700);
+        sb.end();
 
         // debug draw box2d
         if (debug) {
