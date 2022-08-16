@@ -65,14 +65,7 @@ public class CustomizedContactListener implements ContactListener {
             bodiesToRemove2.add(fb.getBody());
             butterfly_received = true;
         }
-        if(catnip_received){
-            catnip_received = false;
-            Play.score++;
-        }
-        if(butterfly_received){
-            butterfly_received = false;
-            Play.score++;
-        }
+
 
     }
 
@@ -124,4 +117,15 @@ public class CustomizedContactListener implements ContactListener {
         return bodiesToRemove2;
     }
 
+    public void update_scores()
+    {
+        if(catnip_received){
+            catnip_received = false;
+            Play.catnip_score++;
+        }
+        if(butterfly_received){
+            butterfly_received = false;
+            Play.butterfly_score++;
+        }
+    }
 }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -56,15 +57,31 @@ public class Play extends GameState {
     private GameButton resume;
     private GameButton restart;
     private GameButton quit;
-    public static long score;
-    private BitmapFont font;
+    public static long catnip_score;
+    public static long butterfly_score;
+    private static int lives;
+    private BitmapFont catnip_font;
+    private BitmapFont butterfly_font;
+    private Sprite catnip_icon;
+    private Sprite butterfly_icon;
     public Play(GameStateManager gsm) {
 
         super(gsm);
 
-        //score initialization
-        score = 0;
-        font = new BitmapFont(Gdx.files.internal("res/images/Font.fnt"));
+        //score related
+        catnip_score = 0;
+        butterfly_score = 0;
+        lives = 3;
+        catnip_font = new BitmapFont(Gdx.files.internal("res/images/Font.fnt"));
+        butterfly_font = new BitmapFont(Gdx.files.internal("res/images/Font.fnt"));
+        Texture catnip_icon_tex = Game.res.getTexture("catnip");
+        catnip_icon = new Sprite(catnip_icon_tex, 0 ,0 , 32, 32);
+        catnip_icon.setPosition(950, 675);
+        Texture butterfly_icon_tex = Game.res.getTexture("butterfly_icon");
+        butterfly_icon = new Sprite(butterfly_icon_tex, 0 ,0 , 32, 32);
+        butterfly_icon.setPosition(1050, 675);
+
+
 
         //buttons
         Texture escape_tex = Game.res.getTexture("escape_button");
@@ -431,7 +448,6 @@ public class Play extends GameState {
         Array<Body> bodies = contactListener.getBodiesToRemove();
         Array<Body> bodies2 = contactListener.getBodiesToRemove2();
 
-
         for (int i = 0; i < bodies.size; i++) {
             Body b = bodies.get(i);
             catnips.removeValue((Catnip) b.getUserData(), true);
@@ -445,6 +461,8 @@ public class Play extends GameState {
         }
         bodies2.clear();
 
+        //update score
+        contactListener.update_scores();
 
         //update player
         if (!pause) {
@@ -532,7 +550,10 @@ public class Play extends GameState {
         // draw score
         sb.setColor(1, 1, 1, 1);
         sb.begin();
-        font.draw(sb, Long.toString(score), 1200, 700);
+        catnip_font.draw(sb, Long.toString(catnip_score), 1000, 700);
+        butterfly_font.draw(sb, Long.toString(butterfly_score), 1100, 700);
+        catnip_icon.draw(sb);
+        butterfly_icon.draw(sb);
         sb.end();
 
         // debug draw box2d

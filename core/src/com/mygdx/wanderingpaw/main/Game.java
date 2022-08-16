@@ -40,6 +40,7 @@ public class Game implements ApplicationListener {
         res.loadTexture("res/images/Buttons.png","Buttons");
         res.loadTexture("res/images/catnip 1 transparent 32x32.png","catnip");
         res.loadTexture("res/images/butterfly 96x96.png","butterfly");
+        res.loadTexture("res/images/butterfly 2 32x32.png","butterfly_icon");
         res.loadTexture("res/images/spike.png","spike");
         res.loadTexture("res/images/escape-icon.png", "escape_button");
 
