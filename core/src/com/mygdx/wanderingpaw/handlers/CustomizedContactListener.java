@@ -12,6 +12,7 @@ public class CustomizedContactListener implements ContactListener {
 
     private boolean catnip_received;
     private boolean butterfly_received;
+    private boolean spike_collision;
 
     public CustomizedContactListener() {
         super();
@@ -64,6 +65,13 @@ public class CustomizedContactListener implements ContactListener {
             //remove butterfly
             bodiesToRemove2.add(fb.getBody());
             butterfly_received = true;
+        }
+        if (fa.getUserData() != null && fa.getUserData().equals("spike")) {
+            spike_collision = true;
+        }
+
+        if (fb.getUserData() != null && fb.getUserData().equals("spike")) {
+            spike_collision = true;
         }
 
 
@@ -126,6 +134,11 @@ public class CustomizedContactListener implements ContactListener {
         if(butterfly_received){
             butterfly_received = false;
             Play.butterfly_score++;
+        }
+        if(spike_collision){
+            spike_collision = false;
+            Play.lives--;
+            if(Play.lives == 0)Play.playerDead = true;
         }
     }
 }
