@@ -28,6 +28,7 @@ public class Save {
 
     public static void load() {
         try {
+            //init();
             if(!saveFileExists()) {
                 init();
                 return;

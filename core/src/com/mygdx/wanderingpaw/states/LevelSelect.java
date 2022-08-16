@@ -70,6 +70,12 @@ public class LevelSelect extends GameState {
                 gsm.setState(GameStateManager.PLAY);
             }
         }
+        if(Level4.isClicked()){
+            if(Play.levelunlocked[3]){
+                Play.level = 4;
+                gsm.setState(GameStateManager.PLAY);
+            }
+        }
     }
 
     public void update(float dt) {

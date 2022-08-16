@@ -59,8 +59,13 @@ public class Menu extends GameState {
 
     public void handleInput() {
 
-        // mouse/touch input
+        // mouse input
         if (newGame.isClicked()) {
+            Save.init();
+            Save.save();
+            gsm.setState(GameStateManager.LEVEL_SELECT);
+        }
+        if(resume.isClicked()){
             gsm.setState(GameStateManager.LEVEL_SELECT);
         }
         if(exit.isClicked()){

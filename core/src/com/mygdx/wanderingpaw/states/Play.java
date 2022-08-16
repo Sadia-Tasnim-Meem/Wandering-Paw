@@ -47,7 +47,7 @@ public class Play extends GameState {
     public static int level;
     public static boolean left = false;
     public static boolean right = true;
-    public static boolean[] levelunlocked = new boolean[4];
+    public static boolean[] levelunlocked = new boolean[5];
 
     private boolean pause;
 
@@ -431,7 +431,7 @@ public class Play extends GameState {
         if (!pause && !playerDead) {
 
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                player.getBody().setLinearVelocity(3, 0);
+                player.getBody().setLinearVelocity(5, 0);
                 if (left) left = false;
                 right = true;
             }
@@ -514,7 +514,7 @@ public class Play extends GameState {
 
             //levelunlocked[level] = true;
             Save.gd.setlevelUnlocked(level);
-            if (level == 3) {
+            if (level == 4) {
                 Save.gd.init();
                 Save.save();
             }
