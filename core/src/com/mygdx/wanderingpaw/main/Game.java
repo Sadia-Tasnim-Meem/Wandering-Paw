@@ -46,6 +46,16 @@ public class Game implements ApplicationListener {
         res.loadTexture("res/images/escape-icon.png", "escape_button");
         res.loadTexture("res/images/game_over.png", "game_over");
 
+        res.loadSound("res/jump.wav");
+        res.loadSound("res/collect.wav");
+        res.loadSound("res/death.wav");
+
+        res.loadMusic("res/bgm.mp3");
+        res.getMusic("bgm").setLooping(true);
+        //res.getMusic("bgm").setVolume(0.5f);
+        res.getMusic("bgm").play();
+
+
 
 
 

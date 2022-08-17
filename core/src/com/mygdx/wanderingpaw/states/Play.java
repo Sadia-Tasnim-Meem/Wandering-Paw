@@ -46,7 +46,7 @@ public class Play extends GameState {
 
     public static int level;
     public static boolean left = false;
-    public static boolean right= true;
+    public static boolean right = true;
     public static boolean[] levelunlocked = new boolean[5];
 
     private boolean pause;
@@ -420,6 +420,7 @@ public class Play extends GameState {
         }
 
         if (playerDead) {
+            //Game.res.getSound("death").play();
             if (restart.isClicked()) {
                 gsm.setState(GameStateManager.PLAY);
             } else if (exit.isClicked()) {
@@ -440,6 +441,7 @@ public class Play extends GameState {
                 left = true;
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.W) && JumpCounter < 2) {
+                Game.res.getSound("jump").play();
 
                 float force = player.getBody().getMass() * 8;
                 player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
@@ -479,12 +481,14 @@ public class Play extends GameState {
             Body b = bodies.get(i);
             catnips.removeValue((Catnip) b.getUserData(), true);
             world.destroyBody(bodies.get(i));
+            Game.res.getSound("collect").play();
         }
         bodies.clear();
         for (int i = 0; i < bodies2.size; i++) {
             Body b = bodies2.get(i);
             butterflies.removeValue((Butterfly) b.getUserData(), true);
             world.destroyBody(bodies2.get(i));
+            Game.res.getSound("collect").play();
         }
         bodies2.clear();
 
@@ -553,9 +557,6 @@ public class Play extends GameState {
         // draw player
         sb.setProjectionMatrix(cam.combined);
         player.playerRender(sb);
-
-
-
 
 
         //draw catnip
