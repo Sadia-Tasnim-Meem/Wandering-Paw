@@ -46,7 +46,7 @@ public class Play extends GameState {
 
     public static int level;
     public static boolean left = false;
-    public static boolean right = true;
+    public static boolean right= true;
     public static boolean[] levelunlocked = new boolean[5];
 
     private boolean pause;
@@ -70,6 +70,9 @@ public class Play extends GameState {
     private Sprite butterfly_icon;
     private Sprite life_count_icon;
     private Sprite game_over;
+    public static double playerPositionX;
+    public static double playerPositionY;
+
     public Play(GameStateManager gsm) {
 
         super(gsm);
@@ -83,29 +86,29 @@ public class Play extends GameState {
         butterfly_font = new BitmapFont(Gdx.files.internal("res/images/Font.fnt"));
         life_font = new BitmapFont(Gdx.files.internal("res/images/Font.fnt"));
         Texture catnip_icon_tex = Game.res.getTexture("catnip");
-        catnip_icon = new Sprite(catnip_icon_tex, 0 ,0 , 32, 32);
+        catnip_icon = new Sprite(catnip_icon_tex, 0, 0, 32, 32);
         catnip_icon.setPosition(950, 675);
         Texture butterfly_icon_tex = Game.res.getTexture("butterfly_icon");
-        butterfly_icon = new Sprite(butterfly_icon_tex, 0 ,0 , 32, 32);
+        butterfly_icon = new Sprite(butterfly_icon_tex, 0, 0, 32, 32);
         butterfly_icon.setPosition(1050, 675);
         Texture life_icon_tex = Game.res.getTexture("life_icon");
-        life_count_icon = new Sprite(life_icon_tex, 0 ,0 , 32, 32);
+        life_count_icon = new Sprite(life_icon_tex, 0, 0, 32, 32);
         life_count_icon.setPosition(1150, 675);
 
         //Game over
         Texture game_over_tex = Game.res.getTexture("game_over");
-        game_over = new Sprite(game_over_tex, 0 ,0 , 500, 505);
-        game_over.setPosition(390,250);
+        game_over = new Sprite(game_over_tex, 0, 0, 500, 505);
+        game_over.setPosition(390, 250);
 
 
         //buttons
         Texture escape_tex = Game.res.getTexture("escape_button");
-        escape = new GameButton(new TextureRegion(escape_tex, 0,0,40,40), (Game.V_WIDTH/30)*1, (Game.V_HEIGHT/20)*19, cam);
+        escape = new GameButton(new TextureRegion(escape_tex, 0, 0, 40, 40), (Game.V_WIDTH / 30) * 1, (Game.V_HEIGHT / 20) * 19, cam);
         Texture tex = Game.res.getTexture("Buttons");
-        resume = new GameButton(new TextureRegion(tex, 0, 96, 233, 96), (Game.V_WIDTH/2), (Game.V_HEIGHT/8)*6, hudCam);
-        restart = new GameButton(new  TextureRegion(tex, 0, 96*4, 233, 96),(Game.V_WIDTH/2), (Game.V_HEIGHT/8)*4,hudCam);
-        quit = new GameButton(new  TextureRegion(tex, 0, 96*3, 233, 96),(Game.V_WIDTH/2), (Game.V_HEIGHT/8)*2,hudCam);
-        exit = new GameButton(new  TextureRegion(tex, 0, 96*2, 233, 96),(Game.V_WIDTH/2), (Game.V_HEIGHT/9)*3,hudCam);
+        resume = new GameButton(new TextureRegion(tex, 0, 96, 233, 96), (Game.V_WIDTH / 2), (Game.V_HEIGHT / 8) * 6, hudCam);
+        restart = new GameButton(new TextureRegion(tex, 0, 96 * 4, 233, 96), (Game.V_WIDTH / 2), (Game.V_HEIGHT / 8) * 4, hudCam);
+        quit = new GameButton(new TextureRegion(tex, 0, 96 * 3, 233, 96), (Game.V_WIDTH / 2), (Game.V_HEIGHT / 8) * 2, hudCam);
+        exit = new GameButton(new TextureRegion(tex, 0, 96 * 2, 233, 96), (Game.V_WIDTH / 2), (Game.V_HEIGHT / 9) * 3, hudCam);
 
         //set up box2d world and contact listener
         world = new World(new Vector2(0, -25f), true);
@@ -404,26 +407,22 @@ public class Play extends GameState {
             last_veclocity = player.getBody().getLinearVelocity();
             player.getBody().setLinearVelocity(0, 0);
             System.out.println(last_veclocity);
-        }
-        else if ((Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || resume.isClicked()) && pause) {
+        } else if ((Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || resume.isClicked()) && pause) {
             pause = false;
             System.out.println(last_veclocity);
             player.getBody().setLinearVelocity(last_veclocity);
-        }
-        else if (restart.isClicked() && pause) {
+        } else if (restart.isClicked() && pause) {
             pause = false;
             gsm.setState(GameStateManager.PLAY);
-        }
-        else if (quit.isClicked() && pause) {
+        } else if (quit.isClicked() && pause) {
             pause = false;
             gsm.setState(GameStateManager.LEVEL_SELECT);
         }
 
-        if(playerDead){
-            if(restart.isClicked()){
+        if (playerDead) {
+            if (restart.isClicked()) {
                 gsm.setState(GameStateManager.PLAY);
-            }
-            else if(exit.isClicked()){
+            } else if (exit.isClicked()) {
                 gsm.setState(GameStateManager.LEVEL_SELECT);
             }
         }
@@ -454,12 +453,16 @@ public class Play extends GameState {
     }
 
     public void update(float dt) {
+        //player position update
+        playerPositionX = player.getBody().getPosition().x;
+        playerPositionY = player.getBody().getPosition().y;
+
         //check input
         handleInput();
 
         //button update
         escape.update(dt);
-        if(pause){
+        if (pause) {
             resume.update(dt);
             restart.update(dt);
             quit.update(dt);
@@ -522,7 +525,7 @@ public class Play extends GameState {
             gsm.setState(GameStateManager.LEVEL_SELECT);
         }
         //check player dead
-        if(playerDead){
+        if (playerDead) {
             player.getBody().setLinearVelocity(0, 0);
             restart.update(dt);
             exit.update(dt);
@@ -549,7 +552,11 @@ public class Play extends GameState {
 
         // draw player
         sb.setProjectionMatrix(cam.combined);
-        player.render(sb);
+        player.playerRender(sb);
+
+
+
+
 
         //draw catnip
         for (int i = 0; i < catnips.size; i++) {
@@ -571,13 +578,13 @@ public class Play extends GameState {
 
         //button
         escape.render(sb);
-        if(pause){
+        if (pause) {
             resume.render(sb);
             restart.render(sb);
             quit.render(sb);
         }
         //button when game is over
-        if(playerDead){
+        if (playerDead) {
             restart.render(sb);
             exit.render(sb);
         }
@@ -588,13 +595,13 @@ public class Play extends GameState {
         sb.begin();
         catnip_font.draw(sb, Long.toString(catnip_score), 1000, 700);
         butterfly_font.draw(sb, Long.toString(butterfly_score), 1100, 700);
-        life_font.draw(sb, Integer.toString(lives), 1200,700);
+        life_font.draw(sb, Integer.toString(lives), 1200, 700);
         catnip_icon.draw(sb);
         butterfly_icon.draw(sb);
         life_count_icon.draw(sb);
 
         //game over
-        if(playerDead){
+        if (playerDead) {
             game_over.draw(sb);
         }
         sb.end();

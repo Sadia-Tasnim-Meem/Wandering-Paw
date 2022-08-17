@@ -3,9 +3,11 @@ package com.mygdx.wanderingpaw.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.mygdx.wanderingpaw.handlers.B2DVars;
 import com.mygdx.wanderingpaw.main.Game;
 import com.mygdx.wanderingpaw.states.Play;
 
@@ -25,8 +27,12 @@ public class Player extends B2DSprite {
 
         width = sprites[0].getRegionWidth();
         height = sprites[0].getRegionHeight();
+
     }
+
+
 }
+
 
 
 

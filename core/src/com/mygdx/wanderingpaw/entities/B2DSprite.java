@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.mygdx.wanderingpaw.handlers.Animation;
 import com.mygdx.wanderingpaw.handlers.B2DVars;
+import com.mygdx.wanderingpaw.states.Play;
 
 
 /**
@@ -25,6 +26,7 @@ public class B2DSprite {
     }
 
     public void setAnimation(TextureRegion reg, float delay) {
+
         setAnimation(new TextureRegion[]{reg}, delay);
     }
 
@@ -45,6 +47,22 @@ public class B2DSprite {
                 (body.getPosition().x * B2DVars.PPM - width / 2),
                 (int) (body.getPosition().y * B2DVars.PPM - height / 2));
         sb.end();
+    }
+
+    //customized rendering for player
+    public void playerRender(SpriteBatch sb) {
+        if (Play.right) {
+            sb.begin();
+            sb.draw(animation.getFrame(),
+                    (body.getPosition().x * B2DVars.PPM - width / 2),
+                    (int) (body.getPosition().y * B2DVars.PPM - height / 2));
+            sb.end();
+        } else if(Play.left) {
+            sb.begin();
+            sb.draw(animation.getFrame(), (float) (Play.left ? ((body.getPosition().x * B2DVars.PPM - width / 2)+width) : (body.getPosition().x * B2DVars.PPM - width / 2)), (float) (body.getPosition().y * B2DVars.PPM - width / 2), Play.left ? -width : width, height);
+
+            sb.end();
+        }
     }
 
     public Body getBody() {
