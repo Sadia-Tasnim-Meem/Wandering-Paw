@@ -31,11 +31,15 @@ public class Game implements ApplicationListener {
         Gdx.input.setInputProcessor(new CustomizedInputProcessor());
 
         res = new Content();
-        //res.loadTexture("res/images/sprite all.png","cat");
+
         res.loadTexture("res/images/sprite.png","cat");
         res.loadTexture("res/images/sprite backward.png","catrev");
         res.loadTexture("res/images/sky_s1280x720.jpg","sky-image");
-        res.loadTexture("res/images/fence.png","fence-image");
+        res.loadTexture("res/images/bg_level1.png","level1-image");
+        res.loadTexture("res/images/bg_level2.jpg","level2-image");
+        res.loadTexture("res/images/bg_level3.jpg","level3-image");
+        res.loadTexture("res/images/bg_level4.jpg","level4-image");
+        //res.loadTexture("res/images/fence.png","fence-image");
         res.loadTexture("res/images/home screen.jpg","menu");
         res.loadTexture("res/images/Buttons.png","Buttons");
         res.loadTexture("res/images/catnip 1 transparent 32x32.png","catnip");
@@ -45,12 +49,14 @@ public class Game implements ApplicationListener {
         res.loadTexture("res/images/spike.png","spike");
         res.loadTexture("res/images/escape-icon.png", "escape_button");
         res.loadTexture("res/images/game_over.png", "game_over");
+        res.loadTexture("res/images/congrats.png", "congrats");
+        res.loadTexture("res/images/lock.png", "lock");
 
-        res.loadSound("res/jump.wav");
-        res.loadSound("res/collect.wav");
-        res.loadSound("res/death.wav");
+        res.loadSound("res/music/jump.wav");
+        res.loadSound("res/music/collect.wav");
+        res.loadSound("res/music/death.wav");
 
-        res.loadMusic("res/bgm.mp3");
+        res.loadMusic("res/music/bgm.mp3");
         res.getMusic("bgm").setLooping(true);
         //res.getMusic("bgm").setVolume(0.5f);
         res.getMusic("bgm").play();

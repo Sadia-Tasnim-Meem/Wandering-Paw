@@ -3,6 +3,7 @@ package com.mygdx.wanderingpaw.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.wanderingpaw.handlers.GameButton;
 import com.mygdx.wanderingpaw.handlers.GameStateManager;
@@ -23,6 +24,10 @@ public class LevelSelect extends GameState {
     private GameButton escape;
 
     private int levelSelected;
+    private Sprite lock1;
+    private Sprite lock2;
+    private Sprite lock3;
+    private Sprite lock4;
 
     public LevelSelect(GameStateManager gsm) {
 
@@ -39,14 +44,23 @@ public class LevelSelect extends GameState {
         Texture escape_tex = Game.res.getTexture("escape_button");
         escape = new GameButton(new TextureRegion(escape_tex, 0,0,40,40), (Game.V_WIDTH/30)*1, (Game.V_HEIGHT/20)*19, cam);
 
+        Texture life_icon_tex = Game.res.getTexture("lock");
+        lock1 = new Sprite(life_icon_tex, 0, 0, 90, 90);
+        lock1.setPosition(750, (Game.V_HEIGHT/10)*8);
+        lock2 = new Sprite(life_icon_tex, 0, 0, 90, 90);
+        lock2.setPosition(750, (Game.V_HEIGHT/10)*6);
+        lock3 = new Sprite(life_icon_tex, 0, 0, 90, 90);
+        lock3.setPosition(750, (Game.V_HEIGHT/10)*4);
+        lock4 = new Sprite(life_icon_tex, 0, 0, 90, 90);
+        lock4.setPosition(750, (Game.V_HEIGHT/10)*2);
+
+
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
 
         Save.load();
         Play.levelunlocked = Save.gd.getlevelUnlocked();
 
-        for(int i=0; i<4; i++){
-            System.out.println(Play.levelunlocked[i]);
-        }
+
 
     }
 
@@ -94,6 +108,10 @@ public class LevelSelect extends GameState {
 
         sb.begin();
         sb.draw(reg, 0, 0);
+        if(!Play.levelunlocked[0])lock1.draw(sb);
+        if(!Play.levelunlocked[1])lock2.draw(sb);
+        if(!Play.levelunlocked[2])lock3.draw(sb);
+        if(!Play.levelunlocked[3])lock4.draw(sb);
         sb.end();
 
         Level1.render(sb);
@@ -101,6 +119,9 @@ public class LevelSelect extends GameState {
         Level3.render(sb);
         Level4.render(sb);
         escape.render(sb);
+
+
+
     }
 
     @Override

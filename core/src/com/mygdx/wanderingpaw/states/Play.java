@@ -63,6 +63,7 @@ public class Play extends GameState {
     public static long butterfly_score;
     public static int lives;
     public static boolean playerDead;
+    public static boolean game_win;
     private BitmapFont catnip_font;
     private BitmapFont butterfly_font;
     private BitmapFont life_font;
@@ -70,6 +71,7 @@ public class Play extends GameState {
     private Sprite butterfly_icon;
     private Sprite life_count_icon;
     private Sprite game_over;
+    private Sprite congrats;
     public static double playerPositionX;
     public static double playerPositionY;
 
@@ -82,9 +84,10 @@ public class Play extends GameState {
         butterfly_score = 0;
         lives = 3;
         playerDead = false;
-        catnip_font = new BitmapFont(Gdx.files.internal("res/images/Font.fnt"));
-        butterfly_font = new BitmapFont(Gdx.files.internal("res/images/Font.fnt"));
-        life_font = new BitmapFont(Gdx.files.internal("res/images/Font.fnt"));
+        game_win = false;
+        catnip_font = new BitmapFont(Gdx.files.internal("res/font/Font.fnt"));
+        butterfly_font = new BitmapFont(Gdx.files.internal("res/font/Font.fnt"));
+        life_font = new BitmapFont(Gdx.files.internal("res/font/Font.fnt"));
         Texture catnip_icon_tex = Game.res.getTexture("catnip");
         catnip_icon = new Sprite(catnip_icon_tex, 0, 0, 32, 32);
         catnip_icon.setPosition(950, 675);
@@ -100,6 +103,10 @@ public class Play extends GameState {
         game_over = new Sprite(game_over_tex, 0, 0, 500, 505);
         game_over.setPosition(390, 250);
 
+        //Game won
+        Texture congrats_tex = Game.res.getTexture("congrats");
+        congrats = new Sprite(congrats_tex, 0, 0, 700, 284);
+        congrats.setPosition(430, 350);
 
         //buttons
         Texture escape_tex = Game.res.getTexture("escape_button");
@@ -129,9 +136,19 @@ public class Play extends GameState {
 
         //create backgrounds
         TextureRegion sky = new TextureRegion(Game.res.getTexture("sky-image"), 0, 0, 1280, 720);
-        TextureRegion fence = new TextureRegion(Game.res.getTexture("fence-image"), 0, 0, 320, 240);
-        backgrounds = new Background[1];
+        TextureRegion level_1 = new TextureRegion(Game.res.getTexture("level1-image"), 0, 0, 1280, 720);
+        TextureRegion level_2 = new TextureRegion(Game.res.getTexture("level2-image"), 0, 0, 1280, 720);
+        TextureRegion level_3 = new TextureRegion(Game.res.getTexture("level3-image"), 0, 0, 1280, 720);
+        TextureRegion level_4 = new TextureRegion(Game.res.getTexture("level4-image"), 0, 0, 1280, 720);
+
+        backgrounds = new Background[5];
         backgrounds[0] = new Background(sky, cam, 0f);
+        backgrounds[1] = new Background(level_1, cam, 0f);
+        backgrounds[2] = new Background(level_2, cam, 0f);
+        backgrounds[3] = new Background(level_3, cam, 0f);
+        backgrounds[4] = new Background(level_4, cam, 0f);
+
+
 
         //create hud
         hud = new HUD(player);
@@ -159,7 +176,7 @@ public class Play extends GameState {
 
         //tileMap = new TmxMapLoader().load("res/images/Test1.tmx");
         if (level == 1) {
-            tileMap = new TmxMapLoader().load("res/images/This is level 1 new.tmx"); // grass
+            tileMap = new TmxMapLoader().load("res/maps/This is level 1 new.tmx"); // grass
             tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
             tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
             tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
@@ -167,7 +184,7 @@ public class Play extends GameState {
             layer = (TiledMapTileLayer) tileMap.getLayers().get("Tile Layer 1");
             createLayers(layer, B2DVars.BIT_GROUND);
         } else if (level == 2) {
-            tileMap = new TmxMapLoader().load("res/images/This is level 2 new.tmx"); // sand
+            tileMap = new TmxMapLoader().load("res/maps/This is level 2 new.tmx"); // sand
             tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
             tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
             tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
@@ -175,7 +192,7 @@ public class Play extends GameState {
             layer = (TiledMapTileLayer) tileMap.getLayers().get("Tile Layer 1");
             createLayers(layer, B2DVars.BIT_GROUND);
         } else if (level == 3) {
-            tileMap = new TmxMapLoader().load("res/images/This is level 3 new.tmx"); //ice
+            tileMap = new TmxMapLoader().load("res/maps/This is level 3 new.tmx"); //ice
             tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
             tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
             tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
@@ -183,7 +200,7 @@ public class Play extends GameState {
             layer = (TiledMapTileLayer) tileMap.getLayers().get("Tile Layer 1");
             createLayers(layer, B2DVars.BIT_GROUND);
         } else if (level == 4) {
-            tileMap = new TmxMapLoader().load("res/images/This is level 4.tmx"); // mountain
+            tileMap = new TmxMapLoader().load("res/maps/This is level 4.tmx"); // mountain
             tileMapWidth = Integer.parseInt(tileMap.getProperties().get("width").toString());
             tileMapHeight = Integer.parseInt(tileMap.getProperties().get("height").toString());
             tileSize = Integer.parseInt(tileMap.getProperties().get("tilewidth").toString());
@@ -406,10 +423,10 @@ public class Play extends GameState {
             pause = true;
             last_veclocity = player.getBody().getLinearVelocity();
             player.getBody().setLinearVelocity(0, 0);
-            System.out.println(last_veclocity);
+
         } else if ((Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || resume.isClicked()) && pause) {
             pause = false;
-            System.out.println(last_veclocity);
+
             player.getBody().setLinearVelocity(last_veclocity);
         } else if (restart.isClicked() && pause) {
             pause = false;
@@ -419,7 +436,7 @@ public class Play extends GameState {
             gsm.setState(GameStateManager.LEVEL_SELECT);
         }
 
-        if (playerDead) {
+        if (playerDead || game_win) {
             //Game.res.getSound("death").play();
             if (restart.isClicked()) {
                 gsm.setState(GameStateManager.PLAY);
@@ -435,17 +452,21 @@ public class Play extends GameState {
                 if (left) left = false;
                 right = true;
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                player.getBody().setLinearVelocity(-3, 0);
+            if (Gdx.input.isKeyPressed(Input.Keys.A) ) {
+                if(player.getBody().getPosition().x * B2DVars.PPM > 50)player.getBody().setLinearVelocity(-3, 0);
                 if (right) right = false;
                 left = true;
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.W) && JumpCounter < 2) {
                 Game.res.getSound("jump").play();
+                float force;
+                if(player.getBody().getPosition().y * B2DVars.PPM < 670) force = player.getBody().getMass() * 8;
+                else force = 0;
 
-                float force = player.getBody().getMass() * 8;
-                player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
-                player.getBody().applyLinearImpulse(new Vector2(0, force), player.getBody().getPosition(), true);
+                if(player.getBody().getPosition().y * B2DVars.PPM < 670){
+                    player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
+                    player.getBody().applyLinearImpulse(new Vector2(0, force), player.getBody().getPosition(), true);
+                }
                 JumpCounter++;
             }
             if (player.getBody().getLinearVelocity().y == 0) {
@@ -455,6 +476,8 @@ public class Play extends GameState {
     }
 
     public void update(float dt) {
+
+        if(playerDead)Game.res.getSound("death").play();
         //player position update
         playerPositionX = player.getBody().getPosition().x;
         playerPositionY = player.getBody().getPosition().y;
@@ -515,21 +538,24 @@ public class Play extends GameState {
             spikes.get(i).update(dt);
         }
 
+        //confining the player within the screen
+        if (player.getBody().getPosition().x * B2DVars.PPM <= 50) {
+            player.getBody().setLinearVelocity(0,0);
+        }
 
         // check player win
         if (player.getBody().getPosition().x * B2DVars.PPM > tileMapWidth * tileSize) {
-
-            //levelunlocked[level] = true;
+            game_win = true;
             Save.gd.setlevelUnlocked(level);
-            if (level == 4) {
+            /*if (level == 4) {
                 Save.gd.init();
                 Save.save();
-            }
+            }*/
             Save.save();
-            gsm.setState(GameStateManager.LEVEL_SELECT);
+            //gsm.setState(GameStateManager.LEVEL_SELECT);
         }
-        //check player dead
-        if (playerDead) {
+        //check player dead or game won
+        if (playerDead || game_win) {
             player.getBody().setLinearVelocity(0, 0);
             restart.update(dt);
             exit.update(dt);
@@ -546,9 +572,7 @@ public class Play extends GameState {
 
         // draw bgs
         sb.setProjectionMatrix(hudCam.combined);
-        for (Background background : backgrounds) {
-            background.render(sb);
-        }
+        backgrounds[level].render(sb);
 
         // draw tilemap
         tiledMapRenderer.setView(cam);
@@ -584,8 +608,8 @@ public class Play extends GameState {
             restart.render(sb);
             quit.render(sb);
         }
-        //button when game is over
-        if (playerDead) {
+        //button when game is over or won
+        if (playerDead || game_win) {
             restart.render(sb);
             exit.render(sb);
         }
@@ -604,6 +628,12 @@ public class Play extends GameState {
         //game over
         if (playerDead) {
             game_over.draw(sb);
+        }
+
+
+        //game won
+        if(game_win){
+            congrats.draw(sb);
         }
         sb.end();
 

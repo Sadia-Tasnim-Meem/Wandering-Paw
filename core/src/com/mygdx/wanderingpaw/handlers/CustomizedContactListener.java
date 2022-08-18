@@ -137,7 +137,7 @@ public class CustomizedContactListener implements ContactListener {
         }
         if(spike_collision){
             spike_collision = false;
-            Play.lives--;
+            if(Play.lives>0)Play.lives--;
             if(Play.lives == 0)Play.playerDead = true;
         }
     }
